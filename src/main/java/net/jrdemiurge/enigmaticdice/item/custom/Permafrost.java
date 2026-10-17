@@ -27,8 +27,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.scores.Team;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.*;
 import net.minecraft.client.Minecraft;
@@ -289,7 +287,6 @@ public class Permafrost extends Item {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, TooltipDisplay pTooltipDisplay, Consumer<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         if (Minecraft.getInstance().hasShiftDown()) {
             int stackDebuffDuration = Config.PermafrostAttackDebuffDuration / 20;

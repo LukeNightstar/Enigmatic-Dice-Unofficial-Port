@@ -5,13 +5,10 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.Objects;
 import java.util.UUID;
 
-@OnlyIn(Dist.CLIENT)
 public final class ClientLookController {
     private static UUID currentTargetUuid = null;
     private static int ticksLeft = 0;

@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import net.jrdemiurge.enigmaticdice.util.SizeScaled;
 
 // Players get their dimensions from Avatar since 1.21.9 (previously Player overrode getDefaultDimensions).
 @Mixin(Avatar.class)
