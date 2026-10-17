@@ -29,6 +29,7 @@ import java.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.component.TooltipDisplay;
 import java.util.function.Consumer;
+import top.theillusivec4.curios.api.CurioAttributeModifiers;
 
 public class GiantsRing extends Item implements ICurioItem {
 
@@ -155,8 +156,16 @@ public class GiantsRing extends Item implements ICurioItem {
                 .orElse(false);
     }
 
+    // Curios 15 builds a curio's modifiers from getDefaultCurioAttributeModifiers; the per-slot
+    // getAttributeModifiers(SlotContext, Identifier, ItemStack) hook is no longer consulted.
     @Override
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, Identifier id, ItemStack stack) {
+    public CurioAttributeModifiers getDefaultCurioAttributeModifiers(ItemStack stack) {
+        CurioAttributeModifiers.Builder builder = CurioAttributeModifiers.builder();
+        curioAttributeModifiers().forEach(builder::addModifier);
+        return builder.build();
+    }
+
+    private static Multimap<Holder<Attribute>, AttributeModifier> curioAttributeModifiers() {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         attributes.put(Attributes.MAX_HEALTH, new AttributeModifier(
                 EnigmaticDice.location("giants_ring_health_bonus"),

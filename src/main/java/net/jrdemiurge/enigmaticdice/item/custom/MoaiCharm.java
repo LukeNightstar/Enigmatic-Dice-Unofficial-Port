@@ -7,7 +7,6 @@ import net.jrdemiurge.enigmaticdice.EnigmaticDice;
 import net.jrdemiurge.enigmaticdice.item.ModItems;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -22,6 +21,7 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.component.TooltipDisplay;
 import java.util.function.Consumer;
+import top.theillusivec4.curios.api.CurioAttributeModifiers;
 
 public class MoaiCharm extends Item implements ICurioItem {
 
@@ -40,8 +40,16 @@ public class MoaiCharm extends Item implements ICurioItem {
                 .orElse(false);
     }
 
+    // Curios 15 builds a curio's modifiers from getDefaultCurioAttributeModifiers; the per-slot
+    // getAttributeModifiers(SlotContext, Identifier, ItemStack) hook is no longer consulted.
     @Override
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, Identifier id, ItemStack stack) {
+    public CurioAttributeModifiers getDefaultCurioAttributeModifiers(ItemStack stack) {
+        CurioAttributeModifiers.Builder builder = CurioAttributeModifiers.builder();
+        curioAttributeModifiers().forEach(builder::addModifier);
+        return builder.build();
+    }
+
+    private static Multimap<Holder<Attribute>, AttributeModifier> curioAttributeModifiers() {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         attributes.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(
                 EnigmaticDice.location("moai_charm_knockback_resistance_bonus"),
