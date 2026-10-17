@@ -37,8 +37,32 @@ This repository **modifies** JrDemiurge's Enigmatic Dice (1.3.1-1.20.1). The mod
     Die events whose item does not exist (for example from an older config file) are skipped with a warning
     instead of dropping an empty item.
   - Korean translation (`ko_kr.json`), using the terms of the Legacy Plus Korean translation.
+- Porting the mod from Minecraft 1.21.1 / NeoForge 21.1 to **Minecraft 26.1.2 / NeoForge 26.1.2** (branch `26.1.2`),
+  with Curios 15. Notable changes:
+  - Swords are plain items with `Item.Properties#sword(ToolMaterial.NETHERITE, ...)`; tooltips, cooldowns, item
+    ticking and curio hooks use their 26.1.2 signatures; item model definitions live in `assets/enigmaticdice/items`.
+  - Giant's Ring and Moai Charm provide their attribute bonuses through Curios 15 default curio modifiers.
+  - The day-cycle die event advances the overworld world clock (26.1 clocks are synced to clients), so the old
+    client-side time packet is gone.
+  - Size scaling (Giant's Ring, shrink events) scales the entity render state; player dimensions are adjusted on
+    `Avatar`, where 26.1 moved them.
+  - Mobs spawned by die events are edited through the value I/O API (mimic / dummy chest loot tables, charged creepers).
+  - `@OnlyIn` annotations are removed (NeoForge 26.1 no longer strips members and warns about them).
 
 Every individual change is recorded in the git history of each branch.
+
+## Status
+
+- `26.1.2`: builds; a dedicated server and a client (Korean) start without errors from this mod. Loot tables, the
+  die events (forced through `/enigmaticDice <event> true`), curio bonuses, held-item effects and save/reload were
+  checked in a dev environment. Melee weapon effects and other player-input features still need in-game play testing.
+- `1.21.1`: builds.
+
+## Building
+
+`./gradlew build` produces `build/libs/enigmaticdice-<version>.jar`. The dev runs (`runClient`, `runServer`) on the
+`26.1.2` branch expect a Legacy Plus 26.1.2 jar at `libs/enigmaticlegacyplus-26.1.2-1.1.2.jar` (not committed);
+`./gradlew runClient -PquickPlayServer=localhost:25565` joins a running dev server directly.
 
 ## License
 
