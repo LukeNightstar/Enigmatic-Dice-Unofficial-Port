@@ -33,7 +33,7 @@ public class CurseBindingEvent extends RandomEvent {
 
         Optional<Holder.Reference<Enchantment>> bindingCurseOpt = serverLevel.registryAccess()
                 .lookupOrThrow(Registries.ENCHANTMENT)
-                .getHolder(Identifier.withDefaultNamespace("binding_curse"));
+                .get(Identifier.withDefaultNamespace("binding_curse"));
 
         if (bindingCurseOpt.isEmpty()) return false;
         Holder<Enchantment> bindingCurse = bindingCurseOpt.get();

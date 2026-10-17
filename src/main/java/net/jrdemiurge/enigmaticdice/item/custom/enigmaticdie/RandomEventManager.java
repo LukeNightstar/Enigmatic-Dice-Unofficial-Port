@@ -363,7 +363,7 @@ public class RandomEventManager {
 
         if (selected.nbt != null && !selected.nbt.isEmpty()) {
             try {
-                CompoundTag nbt = TagParser.parseTag(selected.nbt);
+                CompoundTag nbt = TagParser.parseCompoundFully(selected.nbt);
                 itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
             } catch (CommandSyntaxException e) {
                 EnigmaticDice.LOGGER.error("Error parsing resource event NBT: ", e);
@@ -537,8 +537,8 @@ public class RandomEventManager {
         UUID uuid = UUID.nameUUIDFromBytes("enigmaticdice-sim".getBytes(StandardCharsets.UTF_8));
         FakePlayer fp = FakePlayerFactory.get(serverLevel, new GameProfile(uuid, "[EnigmaticDiceSim]"));
 
-        BlockPos spawn = serverLevel.getSharedSpawnPos();
-        fp.teleportTo(serverLevel, spawn.getX() + 0.5, spawn.getY(), spawn.getZ() + 0.5, Set.of(), 0.0F, 0.0F);
+        BlockPos spawn = serverLevel.getRespawnData().pos();
+        fp.teleportTo(serverLevel, spawn.getX() + 0.5, spawn.getY(), spawn.getZ() + 0.5, Set.of(), 0.0F, 0.0F, true);
 
         fp.removeAllEffects();
         fp.getInventory().clearContent();

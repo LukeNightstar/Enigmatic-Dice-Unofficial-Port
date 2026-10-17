@@ -59,8 +59,7 @@ public class TeleportToStructureEvent extends RandomEvent {
         Identifier structureRL = Identifier.parse(structureId);
 
         try {
-            Holder<Structure> structureHolder = structureRegistry.getHolder(structureRegistry.getResourceKey(
-                    structureRegistry.get(structureRL)).orElseThrow()).orElseThrow();
+            Holder<Structure> structureHolder = structureRegistry.get(structureRL).orElseThrow();
 
             HolderSet<Structure> structureSet = HolderSet.direct(structureHolder);
 

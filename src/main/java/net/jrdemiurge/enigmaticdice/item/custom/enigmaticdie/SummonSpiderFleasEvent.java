@@ -5,10 +5,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.monster.spider.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.entity.EntitySpawnReason;
 
 public class SummonSpiderFleasEvent extends RandomEvent {
 
@@ -38,7 +39,7 @@ public class SummonSpiderFleasEvent extends RandomEvent {
             );
             double targetY = surfaceY + 0.1;
 
-            Spider spider = EntityType.SPIDER.create(pLevel);
+            Spider spider = EntityType.SPIDER.create(pLevel, EntitySpawnReason.EVENT);
             if (spider == null) continue;
 
             spider.snapTo(targetX, targetY, targetZ, 0.0F, 0.0F);

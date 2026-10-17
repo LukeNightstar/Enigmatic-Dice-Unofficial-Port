@@ -21,6 +21,8 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.jrdemiurge.enigmaticdice.util.EntityNbt;
 
 
 public class MassCreeperSummonEvent extends RandomEvent {
@@ -44,14 +46,12 @@ public class MassCreeperSummonEvent extends RandomEvent {
         for (int i = 0; i < CREEPER_COUNT; i++) {
             Vec3 spawnPos = findValidSpawnPosition(pLevel, pPlayer, random);
 
-            Entity entity = EntityType.CREEPER.create(pLevel);
+            Entity entity = EntityType.CREEPER.create(pLevel, EntitySpawnReason.EVENT);
             if (!(entity instanceof Creeper creeper)) continue;
             creeper.snapTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
 
             if (random.nextFloat() < 0.5f) {
-                CompoundTag tag = creeper.saveWithoutId(new CompoundTag());
-                tag.putBoolean("powered", true);
-                creeper.load(tag);
+                EntityNbt.edit(creeper, tag -> tag.putBoolean("powered", true));
             }
 
             creeper.setPersistenceRequired();
@@ -129,7 +129,7 @@ public class MassCreeperSummonEvent extends RandomEvent {
     }
 
     private Holder<MobEffect> pickRandomEffect(Random random) {
-        List<Holder.Reference<MobEffect>> effects = BuiltInRegistries.MOB_EFFECT.holders()
+        List<Holder.Reference<MobEffect>> effects = BuiltInRegistries.MOB_EFFECT.listElements()
                 .filter(effect -> effect != MobEffects.INVISIBILITY)
                 .filter(effect -> !effect.value().isInstantenous())
                 .collect(Collectors.toList());

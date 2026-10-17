@@ -12,6 +12,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.WeakHashMap;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 @EventBusSubscriber(modid = EnigmaticDice.MOD_ID, value = Dist.CLIENT)
 public class GravityCorePlayerTickHandler {
@@ -34,12 +35,12 @@ public class GravityCorePlayerTickHandler {
             wasJumping.put(player, false);
         }
 
-        if (!player.input.jumping) {
+        if (!player.input.keyPresses.jump()) {
             lastTickIsJumping.put(player, false);
             return;
         }
 
-        if (player.input.jumping
+        if (player.input.keyPresses.jump()
                 && !lastTickIsJumping.getOrDefault(player, false)
                 && !wasJumping.getOrDefault(player, false)) {
             long lastTick = lastJumpPressTick.getOrDefault(player, -100L);
@@ -47,7 +48,7 @@ public class GravityCorePlayerTickHandler {
             lastJumpPressTick.put(player, currentTick);
             lastTickIsJumping.put(player, true);
             if (currentTick - lastTick < DOUBLE_JUMP_THRESHOLD_TICKS) {
-                PacketDistributor.sendToServer(new DoubleJumpPacket());
+                ClientPacketDistributor.sendToServer(new DoubleJumpPacket());
                 wasJumping.put(player, true);
                 lastJumpPressTick.put(player, -100L);
             }

@@ -34,7 +34,7 @@ public class EternalBindingEvent extends RandomEvent {
 
         Optional<Holder.Reference<Enchantment>> eternalBindingOpt = serverLevel.registryAccess()
                 .lookupOrThrow(Registries.ENCHANTMENT)
-                .getHolder(ETERNAL_BINDING_ID);
+                .get(ETERNAL_BINDING_ID);
 
         if (eternalBindingOpt.isEmpty()) return false;
         Holder<Enchantment> eternalBinding = eternalBindingOpt.get();

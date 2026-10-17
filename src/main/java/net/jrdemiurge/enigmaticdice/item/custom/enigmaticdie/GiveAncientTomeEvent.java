@@ -43,7 +43,7 @@ public class GiveAncientTomeEvent extends RandomEvent {
         }
 
         Registry<Enchantment> enchantmentRegistry = serverLevel.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
-        List<Holder.Reference<Enchantment>> allEnchantments = new ArrayList<>(enchantmentRegistry.holders().toList());
+        List<Holder.Reference<Enchantment>> allEnchantments = new ArrayList<>(enchantmentRegistry.listElements().toList());
         if (allEnchantments.isEmpty()) {
             EnigmaticDice.LOGGER.warn("No enchantments found in registry.");
             return false;

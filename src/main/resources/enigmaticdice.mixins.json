@@ -7,11 +7,11 @@
     "defaultRequire": 1
   },
   "mixins": [
+    "AvatarMixin",
     "LivingEntityMixin",
     "PlayerMixin"
   ],
   "client": [
-    "EntityRendererAccessor",
     "LivingEntityRendererMixin"
   ]
 }

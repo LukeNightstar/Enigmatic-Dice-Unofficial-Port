@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity {
+public abstract class LivingEntityMixin extends Entity implements SizeScaled {
 
     protected LivingEntityMixin(EntityType<? extends LivingEntity> type, Level level) {
         super(type, level);
@@ -22,6 +22,11 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Unique
     private float enigmatic_Dice_1_21_1$scale = 1F;
+
+    @Override
+    public float enigmaticdice$getSizeScale() {
+        return enigmatic_Dice_1_21_1$scale;
+    }
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void onTick(CallbackInfo ci) {

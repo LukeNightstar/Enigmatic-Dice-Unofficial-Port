@@ -9,10 +9,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.horse.Horse;
+import net.minecraft.world.entity.animal.equine.Horse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public class SummonTamedHorse extends RandomEvent {
 
@@ -36,12 +38,12 @@ public class SummonTamedHorse extends RandomEvent {
             return false;
         }
 
-        Horse horse = EntityType.HORSE.create(pLevel);
+        Horse horse = EntityType.HORSE.create(pLevel, EntitySpawnReason.EVENT);
         if (horse == null) return false;
 
         horse.snapTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
         horse.tameWithName(pPlayer);
-        horse.equipSaddle(new ItemStack(net.minecraft.world.item.Items.SADDLE), SoundSource.NEUTRAL);
+        horse.setItemSlot(EquipmentSlot.SADDLE, new ItemStack(net.minecraft.world.item.Items.SADDLE));
 
         horse.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.3375D);
         horse.getAttribute(Attributes.JUMP_STRENGTH).setBaseValue(1.0D);

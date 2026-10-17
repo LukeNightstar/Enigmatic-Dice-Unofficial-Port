@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.lang.reflect.Method;
+import net.minecraft.world.entity.EntitySpawnReason;
 
 public class SummonCandicornEvent extends RandomEvent {
 
@@ -38,7 +39,7 @@ public class SummonCandicornEvent extends RandomEvent {
         EntityType<?> entityType = EntityType.byString("alexscaves:candicorn").orElse(null);
         if (entityType == null) return false;
 
-        Entity entity = entityType.create(pLevel);
+        Entity entity = entityType.create(pLevel, EntitySpawnReason.EVENT);
         if (entity == null) return false;
 
         entity.snapTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
@@ -46,7 +47,7 @@ public class SummonCandicornEvent extends RandomEvent {
 
         if (entity instanceof TamableAnimal tamable) {
             tamable.tame(pPlayer);
-            tamable.setOwnerUUID(pPlayer.getUUID());
+            tamable.setOwner(pPlayer);
             tamable.addEffect(new MobEffectInstance(MobEffects.REGENERATION, MobEffectInstance.INFINITE_DURATION, 0, false, false));
         }
 

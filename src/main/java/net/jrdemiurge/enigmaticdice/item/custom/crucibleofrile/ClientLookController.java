@@ -60,7 +60,7 @@ public final class ClientLookController {
         desiredYaw = Mth.wrapDegrees(desiredYaw);
         desiredPitch = Mth.clamp(desiredPitch, -90.0F, 90.0F);
 
-        float dt = mc.getTimer().getGameTimeDeltaTicks();
+        float dt = mc.getDeltaTracker().getGameTimeDeltaTicks();
         float maxYawStep = MAX_YAW_SPEED_DEG_PER_SEC * dt;
         float maxPitchStep = MAX_PITCH_SPEED_DEG_PER_SEC * dt;
 

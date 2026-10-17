@@ -14,6 +14,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.EntitySpawnReason;
 
 
 public class BroodAwakensEvent extends RandomEvent {
@@ -38,13 +39,13 @@ public class BroodAwakensEvent extends RandomEvent {
         }
 
         // Try to get the OBSESSION effect from Born in Chaos mod via registry
-        var obsessionEffect = BuiltInRegistries.MOB_EFFECT.getHolder(Identifier.parse("born_in_chaos_v1:obsession"));
+        var obsessionEffect = BuiltInRegistries.MOB_EFFECT.get(Identifier.parse("born_in_chaos_v1:obsession"));
 
         for (int i = 0; i < 2; i++) {
             EntityType<?> entityType = EntityType.byString("born_in_chaos_v1:swarmer").orElse(null);
             if (entityType == null) return false;
 
-            Entity entity = entityType.create(pLevel);
+            Entity entity = entityType.create(pLevel, EntitySpawnReason.EVENT);
             if (entity == null) return false;
 
             entity.snapTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
@@ -74,7 +75,7 @@ public class BroodAwakensEvent extends RandomEvent {
             EntityType<?> entityType = EntityType.byString("born_in_chaos_v1:mother_spider").orElse(null);
             if (entityType == null) return false;
 
-            Entity entity = entityType.create(pLevel);
+            Entity entity = entityType.create(pLevel, EntitySpawnReason.EVENT);
             if (entity == null) return false;
 
             entity.snapTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);

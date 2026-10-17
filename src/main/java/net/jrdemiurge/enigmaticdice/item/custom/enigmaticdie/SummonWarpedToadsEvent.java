@@ -14,6 +14,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import net.minecraft.world.entity.EntitySpawnReason;
 
 public class SummonWarpedToadsEvent extends RandomEvent {
     private static final List<String> NAMES = List.of(
@@ -50,7 +51,7 @@ public class SummonWarpedToadsEvent extends RandomEvent {
                 EntityType<?> entityType = EntityType.byString("alexsmobs:warped_toad").orElse(null);
                 if (entityType == null) return;
 
-                Entity entity = entityType.create(pLevel);
+                Entity entity = entityType.create(pLevel, EntitySpawnReason.EVENT);
                 if (entity == null) return;
 
                 entity.snapTo(pos.x, pos.y, pos.z, 0, 0);
@@ -58,7 +59,7 @@ public class SummonWarpedToadsEvent extends RandomEvent {
 
                 if (entity instanceof TamableAnimal tamable) {
                     tamable.tame(pPlayer);
-                    tamable.setOwnerUUID(pPlayer.getUUID());
+                    tamable.setOwner(pPlayer);
                     tamable.setCustomName(Component.literal(NAMES.get(pLevel.getRandom().nextInt(NAMES.size()))));
                     tamable.addEffect(new MobEffectInstance(MobEffects.REGENERATION, MobEffectInstance.INFINITE_DURATION, 0, false, false));
                 }

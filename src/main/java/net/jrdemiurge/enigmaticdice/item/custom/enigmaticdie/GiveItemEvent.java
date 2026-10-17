@@ -47,7 +47,7 @@ public class GiveItemEvent extends RandomEvent {
 
         if (!nbtString.isEmpty()) {
             try {
-                CompoundTag nbt = TagParser.parseTag(nbtString);
+                CompoundTag nbt = TagParser.parseCompoundFully(nbtString);
                 itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
             } catch (CommandSyntaxException e) {
                 EnigmaticDice.LOGGER.error("Error while parsing nbt: ", e);

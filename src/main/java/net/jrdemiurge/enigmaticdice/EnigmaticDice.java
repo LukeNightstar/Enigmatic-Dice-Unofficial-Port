@@ -14,7 +14,6 @@ import net.jrdemiurge.enigmaticdice.item.custom.Antimatter;
 import net.jrdemiurge.enigmaticdice.item.custom.enigmaticdie.RandomEventManager;
 import net.jrdemiurge.enigmaticdice.network.DoubleJumpPacket;
 import net.jrdemiurge.enigmaticdice.network.LookAtTargetPacket;
-import net.jrdemiurge.enigmaticdice.network.TimeAccelStartPacket;
 import net.jrdemiurge.enigmaticdice.sound.ModSounds;
 import net.jrdemiurge.enigmaticdice.stat.ModStats;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -68,7 +67,6 @@ public class EnigmaticDice {
     public void onPacketSetup(final RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(MOD_ID + ".1.0").optional();
         registrar.playToServer(DoubleJumpPacket.TYPE, DoubleJumpPacket.STREAM_CODEC, DoubleJumpPacket::handle);
-        registrar.playToClient(TimeAccelStartPacket.TYPE, TimeAccelStartPacket.STREAM_CODEC, TimeAccelStartPacket::handle);
         registrar.playToClient(LookAtTargetPacket.TYPE, LookAtTargetPacket.STREAM_CODEC, LookAtTargetPacket::handle);
     }
 

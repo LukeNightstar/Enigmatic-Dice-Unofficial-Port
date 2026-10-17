@@ -16,6 +16,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.EntitySpawnReason;
 
 public class AntimatterBombEvent extends RandomEvent {
 
@@ -38,7 +39,7 @@ public class AntimatterBombEvent extends RandomEvent {
         if (entityType == null || entityType == EntityType.PIG) return false;
 
         Scheduler.schedule(() -> {
-            Entity entity = entityType.create(pLevel);
+            Entity entity = entityType.create(pLevel, EntitySpawnReason.EVENT);
             if (entity != null) {
                 entity.snapTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
                 pLevel.addFreshEntity(entity);

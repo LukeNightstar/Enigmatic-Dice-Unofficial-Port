@@ -10,6 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.EntitySpawnReason;
 
 public class BlackHoleBombEvent extends RandomEvent {
 
@@ -30,7 +31,7 @@ public class BlackHoleBombEvent extends RandomEvent {
         EntityType<?> entityType = BuiltInRegistries.ENTITY_TYPE.getValue(Identifier.parse("terramity:black_hole_bomb_entity"));
         if (entityType == null || entityType == EntityType.PIG) return false;
 
-        Entity entity = entityType.create(pLevel);
+        Entity entity = entityType.create(pLevel, EntitySpawnReason.EVENT);
         if (entity == null) return false;
 
         entity.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);

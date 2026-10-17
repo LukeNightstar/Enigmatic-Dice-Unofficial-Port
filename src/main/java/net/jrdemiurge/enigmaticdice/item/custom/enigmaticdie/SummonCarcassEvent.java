@@ -8,6 +8,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.EntitySpawnReason;
 
 public class SummonCarcassEvent extends RandomEvent {
 
@@ -38,7 +39,7 @@ public class SummonCarcassEvent extends RandomEvent {
                 EntityType<?> entityType = EntityType.byString("netherexp:carcass").orElse(null);
                 if (entityType == null) return;
 
-                Entity entity = entityType.create(pLevel);
+                Entity entity = entityType.create(pLevel, EntitySpawnReason.EVENT);
                 if (entity == null) return;
 
                 entity.snapTo(pos.x, pos.y, pos.z, 0, 0);

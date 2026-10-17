@@ -37,9 +37,9 @@ public class GiveRandomPotionEvent extends RandomEvent {
         int effectCount = 3 + random.nextInt(4); // 3 to 6 effects
 
         List<Holder.Reference<MobEffect>> availableEffects = new ArrayList<>();
-        for (Holder.Reference<MobEffect> effectRef : BuiltInRegistries.MOB_EFFECT.holders().toList()) {
+        for (Holder.Reference<MobEffect> effectRef : BuiltInRegistries.MOB_EFFECT.listElements().toList()) {
             if (onlyVanillaEffects) {
-                if ("minecraft".equals(effectRef.key().location().getNamespace())) {
+                if ("minecraft".equals(effectRef.key().identifier().getNamespace())) {
                     availableEffects.add(effectRef);
                 }
             } else {
@@ -68,7 +68,7 @@ public class GiveRandomPotionEvent extends RandomEvent {
             selectedEffects.add(new MobEffectInstance(effectHolder, duration, amplifier));
         }
 
-        PotionContents potionContents = new PotionContents(Optional.empty(), Optional.empty(), selectedEffects);
+        PotionContents potionContents = new PotionContents(Optional.empty(), Optional.empty(), selectedEffects, Optional.empty());
         potion.set(DataComponents.POTION_CONTENTS, potionContents);
 
         // Add glint via empty enchantments to make it look enchanted

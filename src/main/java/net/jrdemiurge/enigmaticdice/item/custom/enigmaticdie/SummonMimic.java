@@ -9,6 +9,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.EntitySpawnReason;
 
 
 public class SummonMimic extends RandomEvent {
@@ -35,7 +36,7 @@ public class SummonMimic extends RandomEvent {
         EntityType<?> entityType = EntityType.byString("artifacts:mimic").orElse(null);
         if (entityType == null) return false;
 
-        Entity entity = entityType.create(pLevel);
+        Entity entity = entityType.create(pLevel, EntitySpawnReason.EVENT);
         if (entity == null) return false;
 
         entity.snapTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
