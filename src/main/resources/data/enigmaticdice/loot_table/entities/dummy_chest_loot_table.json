@@ -5,67 +5,67 @@
       "entries": [
         {
           "type": "minecraft:loot_table",
-          "name": "minecraft:chests/abandoned_mineshaft"
+          "value": "minecraft:chests/abandoned_mineshaft"
         },
         {
           "type": "minecraft:loot_table",
-          "name": "minecraft:chests/ancient_city"
+          "value": "minecraft:chests/ancient_city"
         },
         {
           "type": "minecraft:loot_table",
-          "name": "minecraft:chests/bastion_hoglin_stable"
+          "value": "minecraft:chests/bastion_hoglin_stable"
         },
         {
           "type": "minecraft:loot_table",
-          "name": "minecraft:chests/bastion_other"
+          "value": "minecraft:chests/bastion_other"
         },
         {
           "type": "minecraft:loot_table",
-          "name": "minecraft:chests/bastion_treasure"
+          "value": "minecraft:chests/bastion_treasure"
         },
         {
           "type": "minecraft:loot_table",
-          "name": "minecraft:chests/buried_treasure"
+          "value": "minecraft:chests/buried_treasure"
         },
         {
           "type": "minecraft:loot_table",
-          "name": "minecraft:chests/desert_pyramid"
+          "value": "minecraft:chests/desert_pyramid"
         },
         {
           "type": "minecraft:loot_table",
-          "name": "minecraft:chests/end_city_treasure"
+          "value": "minecraft:chests/end_city_treasure"
         },
         {
           "type": "minecraft:loot_table",
-          "name": "minecraft:chests/jungle_temple"
+          "value": "minecraft:chests/jungle_temple"
         },
         {
           "type": "minecraft:loot_table",
-          "name": "minecraft:chests/nether_bridge"
+          "value": "minecraft:chests/nether_bridge"
         },
         {
           "type": "minecraft:loot_table",
-          "name": "minecraft:chests/pillager_outpost"
+          "value": "minecraft:chests/pillager_outpost"
         },
         {
           "type": "minecraft:loot_table",
-          "name": "minecraft:chests/ruined_portal"
+          "value": "minecraft:chests/ruined_portal"
         },
         {
           "type": "minecraft:loot_table",
-          "name": "minecraft:chests/shipwreck_treasure"
+          "value": "minecraft:chests/shipwreck_treasure"
         },
         {
           "type": "minecraft:loot_table",
-          "name": "minecraft:chests/simple_dungeon"
+          "value": "minecraft:chests/simple_dungeon"
         },
         {
           "type": "minecraft:loot_table",
-          "name": "minecraft:chests/stronghold_library"
+          "value": "minecraft:chests/stronghold_library"
         },
         {
           "type": "minecraft:loot_table",
-          "name": "minecraft:chests/woodland_mansion"
+          "value": "minecraft:chests/woodland_mansion"
         }
       ]
     }

@@ -18,7 +18,7 @@ import java.util.Optional;
 
 
 public class EternalBindingEvent extends RandomEvent {
-    private static final ResourceLocation ETERNAL_BINDING_ID = ResourceLocation.fromNamespaceAndPath("enigmaticlegacy", "eternal_binding");
+    private static final ResourceLocation ETERNAL_BINDING_ID = ResourceLocation.fromNamespaceAndPath("enigmaticlegacyplus", "eternal_binding_curse");
 
     public EternalBindingEvent(int rarity) {
         this.rarity = rarity;

@@ -1,0 +1,298 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 3
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:potion_contents": {
+                  "custom_color": 3847130,
+                  "custom_effects": [
+                    {
+                      "id": "minecraft:speed",
+                      "duration": 12000,
+                      "amplifier": 1
+                    },
+                    {
+                      "id": "minecraft:jump_boost",
+                      "duration": 12000,
+                      "amplifier": 1
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "item.enigmaticdice.traveler_potion",
+                "italic": false
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 3
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:potion_contents": {
+                  "custom_color": 16701501,
+                  "custom_effects": [
+                    {
+                      "id": "minecraft:haste",
+                      "duration": 12000,
+                      "amplifier": 1
+                    },
+                    {
+                      "id": "minecraft:night_vision",
+                      "duration": 12000
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "item.enigmaticdice.miner_potion",
+                "italic": false
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 3
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:potion_contents": {
+                  "custom_color": 11546150,
+                  "custom_effects": [
+                    {
+                      "id": "minecraft:haste",
+                      "duration": 12000,
+                      "amplifier": 1
+                    },
+                    {
+                      "id": "minecraft:strength",
+                      "duration": 12000,
+                      "amplifier": 1
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "item.enigmaticdice.warrior_potion",
+                "italic": false
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 3
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:potion_contents": {
+                  "custom_color": 3949738,
+                  "custom_effects": [
+                    {
+                      "id": "minecraft:water_breathing",
+                      "duration": 12000
+                    },
+                    {
+                      "id": "minecraft:dolphins_grace",
+                      "duration": 12000,
+                      "amplifier": 1
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "item.enigmaticdice.diver_potion",
+                "italic": false
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 3
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:potion_contents": {
+                  "custom_color": 15961002,
+                  "custom_effects": [
+                    {
+                      "id": "minecraft:health_boost",
+                      "duration": 12000,
+                      "amplifier": 1
+                    },
+                    {
+                      "id": "minecraft:regeneration",
+                      "duration": 12000
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "item.enigmaticdice.potion_of_life",
+                "italic": false
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 3
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:potion_contents": {
+                  "custom_color": 4673362,
+                  "custom_effects": [
+                    {
+                      "id": "minecraft:resistance",
+                      "duration": 12000
+                    },
+                    {
+                      "id": "minecraft:fire_resistance",
+                      "duration": 12000
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "item.enigmaticdice.iron_skin_potion",
+                "italic": false
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 3
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:potion_contents": {
+                  "custom_color": 8439583,
+                  "custom_effects": [
+                    {
+                      "id": "minecraft:luck",
+                      "duration": 12000,
+                      "amplifier": 1
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "item.enigmaticdice.luck_potion",
+                "italic": false
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 3
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:potion_contents": {
+                  "custom_color": 16772413,
+                  "custom_effects": [
+                    {
+                      "id": "minecraft:absorption",
+                      "duration": 12000,
+                      "amplifier": 4
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "item.enigmaticdice.temporal_protection_potion",
+                "italic": false
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
