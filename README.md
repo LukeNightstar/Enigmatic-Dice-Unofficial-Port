@@ -36,6 +36,7 @@ This repository **modifies** JrDemiurge's Enigmatic Dice (1.3.1-1.20.1). The mod
     unregistered; their leftover die events, models, textures, translations and weapon attributes are removed.
     Die events whose item does not exist (for example from an older config file) are skipped with a warning
     instead of dropping an empty item.
+  - Korean translation (`ko_kr.json`), using the terms of the Legacy Plus Korean translation.
 
 Every individual change is recorded in the git history of each branch.
 
