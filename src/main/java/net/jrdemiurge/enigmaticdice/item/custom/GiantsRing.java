@@ -51,10 +51,26 @@ public class GiantsRing extends Item implements ICurioItem {
         return true;
     }
 
+    // Only one Giant's Ring counts: the original used fixed modifier UUIDs, so a second ring added nothing.
+    // Curios now gives every slot its own modifier id, which would stack the bonuses of two rings.
+    @Override
+    public boolean canEquip(SlotContext slotContext, ItemStack stack) {
+        return !isWornElsewhere(slotContext);
+    }
+
+    private static boolean isWornElsewhere(SlotContext slotContext) {
+        return CuriosApi.getCuriosInventory(slotContext.entity())
+                .map(handler -> handler.findCurios(ModItems.GIANTS_RING.get()).stream()
+                        .anyMatch(result -> !result.slotContext().identifier().equals(slotContext.identifier())
+                                || result.slotContext().index() != slotContext.index()))
+                .orElse(false);
+    }
+
     @Override
     public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack) {
         if (slotContext.entity().level().isClientSide() || !(slotContext.entity() instanceof Player))
             return;
+        if (isWornElsewhere(slotContext)) return;
         AttributeInstance stepHeight = slotContext.entity().getAttribute(Attributes.STEP_HEIGHT);
         if (stepHeight != null && stepHeight.hasModifier(STEP_HEIGHT_ID)) {
             stepHeight.removeModifier(STEP_HEIGHT_ID);
