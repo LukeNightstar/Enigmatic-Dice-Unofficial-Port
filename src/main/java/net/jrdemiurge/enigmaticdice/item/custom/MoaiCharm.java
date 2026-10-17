@@ -23,7 +23,6 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.List;
-import java.util.UUID;
 
 public class MoaiCharm extends Item implements ICurioItem {
 
@@ -43,7 +42,7 @@ public class MoaiCharm extends Item implements ICurioItem {
     }
 
     @Override
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack) {
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         attributes.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(
                 EnigmaticDice.location("moai_charm_knockback_resistance_bonus"),

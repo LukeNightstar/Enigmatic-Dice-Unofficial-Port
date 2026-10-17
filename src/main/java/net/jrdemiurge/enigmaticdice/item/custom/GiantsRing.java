@@ -50,10 +50,26 @@ public class GiantsRing extends Item implements ICurioItem {
         return true;
     }
 
+    // Only one Giant's Ring counts: the original used fixed modifier UUIDs, so a second ring added nothing.
+    // Legacy Plus adds a second ring slot; a second Giant's Ring can no longer be equipped.
+    @Override
+    public boolean canEquip(SlotContext slotContext, ItemStack stack) {
+        return !isWornElsewhere(slotContext);
+    }
+
+    private static boolean isWornElsewhere(SlotContext slotContext) {
+        return CuriosApi.getCuriosInventory(slotContext.entity())
+                .map(handler -> handler.findCurios(ModItems.GIANTS_RING.get()).stream()
+                        .anyMatch(result -> !result.slotContext().identifier().equals(slotContext.identifier())
+                                || result.slotContext().index() != slotContext.index()))
+                .orElse(false);
+    }
+
     @Override
     public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack) {
         if (slotContext.entity().level().isClientSide || !(slotContext.entity() instanceof Player))
             return;
+        if (isWornElsewhere(slotContext)) return;
         AttributeInstance stepHeight = slotContext.entity().getAttribute(Attributes.STEP_HEIGHT);
         if (stepHeight != null && stepHeight.hasModifier(STEP_HEIGHT_ID)) {
             stepHeight.removeModifier(STEP_HEIGHT_ID);
@@ -156,7 +172,7 @@ public class GiantsRing extends Item implements ICurioItem {
     }
 
     @Override
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack) {
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         attributes.put(Attributes.MAX_HEALTH, new AttributeModifier(
                 EnigmaticDice.location("giants_ring_health_bonus"),

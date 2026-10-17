@@ -37,6 +37,9 @@ This repository **modifies** JrDemiurge's Enigmatic Dice (1.3.1-1.20.1). The mod
     Die events whose item does not exist (for example from an older config file) are skipped with a warning
     instead of dropping an empty item.
   - Korean translation (`ko_kr.json`), using the terms of the Legacy Plus Korean translation.
+  - Giant's Ring and Moai Charm attribute bonuses (health, damage, speed, knockback resistance) are applied again;
+    the 1.21.1 port overrode a Curios method that Curios no longer calls. Only one Giant's Ring counts, as in the
+    original: a second one cannot be equipped, and removing one ring no longer strips the size bonus of the other.
 
 Every individual change is recorded in the git history of each branch.
 
