@@ -1,0 +1,131 @@
+package net.jrdemiurge.enigmaticdice.item.custom;
+
+import net.jrdemiurge.enigmaticdice.Config;
+import net.jrdemiurge.enigmaticdice.EnigmaticDice;
+import net.jrdemiurge.enigmaticdice.item.ModItems;
+import net.jrdemiurge.enigmaticdice.scheduler.Scheduler;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import top.theillusivec4.curios.api.CuriosApi;
+
+import java.util.List;
+import java.util.WeakHashMap;
+
+public class MoonShard extends Item {
+
+    private static final ResourceLocation GRAVITY_MODIFIER_ID = EnigmaticDice.location("moon_shard_gravity_reduction");
+    private static final WeakHashMap<Player, Boolean> gravityDisable = new WeakHashMap<>();
+
+    public MoonShard(Properties pProperties) {
+        super(pProperties);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
+        if (!pLevel.isClientSide && pEntity instanceof Player player) {
+            if (pSlotId >= 0 && pSlotId <= 8) {
+                boolean isSneaking = player.isShiftKeyDown();
+                AttributeInstance gravityAttribute = player.getAttribute(Attributes.GRAVITY);
+
+                if (gravityAttribute != null) {
+                    AttributeModifier existingModifier = gravityAttribute.getModifier(GRAVITY_MODIFIER_ID);
+
+                    if (player.getMainHandItem().is(ModItems.MOON.get()) || player.getOffhandItem().is(ModItems.MOON.get())){
+                        if (existingModifier != null) {
+                            gravityAttribute.removeModifier(GRAVITY_MODIFIER_ID);
+                        }
+                        return;
+                    }
+
+                    if (isWearingGravityCore(player)){
+                        boolean gravityDisabled = gravityDisable.getOrDefault(player, false);
+
+                        if (isSneaking && !player.onGround() && !gravityDisabled) {
+                            gravityDisable.put(player, true);
+                            if (existingModifier != null) {
+                                gravityAttribute.removeModifier(GRAVITY_MODIFIER_ID);
+                            }
+                        }
+
+                        if (player.onGround()) {
+                            gravityDisable.put(player, false);
+                            if (existingModifier == null) {
+                                gravityAttribute.addTransientModifier(new AttributeModifier(
+                                        GRAVITY_MODIFIER_ID,
+                                        Config.MoonShardGravityReduction,
+                                        AttributeModifier.Operation.ADD_VALUE
+                                ));
+                            }
+                        }
+                    } else {
+                        if (!isSneaking) {
+                            if (existingModifier == null) {
+                                gravityAttribute.addTransientModifier(new AttributeModifier(
+                                        GRAVITY_MODIFIER_ID,
+                                        Config.MoonShardGravityReduction,
+                                        AttributeModifier.Operation.ADD_VALUE
+                                ));
+                            }
+                        } else {
+                            if (existingModifier != null) {
+                                gravityAttribute.removeModifier(GRAVITY_MODIFIER_ID);
+                            }
+                        }
+                    }
+                }
+
+                Scheduler.schedule(() -> {
+                    boolean found = false;
+                    for (int i = 0; i <= 8; i++) {
+                        ItemStack invStack = player.getInventory().getItem(i);
+                        if (invStack.is(ModItems.MOON_SHARD.get())) {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    AttributeInstance gravityAttributeLater = player.getAttribute(Attributes.GRAVITY);
+                    if (!found && gravityAttributeLater != null) {
+                        AttributeModifier modifier = gravityAttributeLater.getModifier(GRAVITY_MODIFIER_ID);
+                        if (modifier != null) {
+                            gravityAttributeLater.removeModifier(GRAVITY_MODIFIER_ID);
+                        }
+                    }
+                }, 10);
+            }
+        }
+    }
+
+    private static boolean isWearingGravityCore(Player player) {
+        return CuriosApi.getCuriosInventory(player)
+                .map(handler -> !handler.findCurios(ModItems.GRAVITY_CORE.get()).isEmpty())
+                .orElse(false);
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+        if (Screen.hasShiftDown()) {
+            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.while_hotbar"));
+            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.moon_shard_1"));
+            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.moon_shard_2"));
+            pTooltipComponents.add(Component.literal(" "));
+            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.moon_shard_3"));
+        } else {
+            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.holdShift"));
+        }
+        super.appendHoverText(pStack, pContext, pTooltipComponents, pIsAdvanced);
+    }
+}
