@@ -9,7 +9,11 @@ Enigmatic Legacy Plus의 애드온이다. Legacy Plus는 이미 본인 포크(`L
 Minecraft 26.1.2 / NeoForge `26.1.2.122`로 포팅되어 있다. Dice도 같은 버전으로 옮겨서 **실제 게임에서 Legacy Plus 26.1.2와 함께 쓰는 것**이 목적이다.
 
 출발점은 앞서 비공개로 진행한 1.21.1 포팅본(NeoForge 21.1.187, `mod_version=1.21.1-1.4.3`)이다.
-원작 최신(1.3.1-1.20.1)의 내용은 이 포팅본에 모두 들어 있다.
+원작 최신(1.3.1-1.20.1)의 내용은 이 포팅본에 들어 있다. 예외 두 가지:
+- 미완성 자리표시 무기 4종(`kyomu`, `phoenix`, `fire_crystal_greatsword`, `fire_crystal_spear` — 원작의 `UnfinishedWeapon`)은 아이템 등록이 빠졌다.
+  처리 방법은 "버그 수정" 4번 (사용자 결정: 제거).
+- Giant's Ring·Ring of Agility·Divine Shield의 Curios 툴팁 한 줄을 숨기던 클라이언트 믹스인(`ClientEventHandlerMixin`)이 빠졌다.
+  표시상의 차이일 뿐이라 1.21.1을 따라 넣지 않는다 (내 판단).
 
 ## 저장소
 
@@ -37,7 +41,7 @@ Minecraft 26.1.2 / NeoForge `26.1.2.122`로 포팅되어 있다. Dice도 같은 
 
 ## 비목표
 
-- 기능 추가·제거, 밸런스 변경.
+- 기능 추가·제거, 밸런스 변경 (예외: 버그 수정 3의 미완성 무기 잔재 제거).
 - 원작 1.20.1 Forge 브랜치 유지보수.
 - CurseForge/Modrinth 배포 (사용자가 원하면 별도 작업).
 - 1.21.1 브랜치의 인게임 재검증 (빌드 확인까지만; 아래 "검증").
@@ -52,7 +56,7 @@ Minecraft 26.1.2 / NeoForge `26.1.2.122`로 포팅되어 있다. Dice도 같은 
 ## 제약
 
 - Legacy Plus 코드는 Dice에서 직접 import하지 않는다(확인함). 참조는 ID 문자열뿐이다:
-  `enigmaticlegacyplus:earth_heart_fragment`, `earth_heart`, `astral_dust`, `astral_dust_sack`, 인챈트 `eternal_binding_curse`.
+  설정 JSON의 아이템 ID 22개(`earth_heart_fragment`, `astral_dust` 등 — 모두 Legacy Plus 26.1.2에 존재 확인)와 인챈트 `eternal_binding_curse`.
   → 빌드 의존성은 필요 없고, Legacy Plus는 개발 실행(runClient) 환경에만 넣는다.
   → 1.21.1 `build.gradle`의 `compileOnly files('libs/enigmaticlegacyplus-1.21.1-0.6.0.jar')`는 쓰이지 않으므로 제거.
 - 26.1.2는 난독화가 없어져 Parchment를 쓰지 않는다(Legacy Plus 26.1.2도 미사용). Gradle 9.2.1, ModDevGradle `2.0.148`,
@@ -72,11 +76,18 @@ Minecraft 26.1.2 / NeoForge `26.1.2.122`로 포팅되어 있다. Dice도 같은 
    코드에서 이 테이블을 참조하는 경로(`ResourceKey`/`ResourceLocation`)도 함께 맞춘다. 레시피 JSON은 해당 버전 형식으로 갱신.
 2. **영원한 속박 이벤트 ID**: `EternalBindingEvent`가 `enigmaticlegacy:eternal_binding`을 찾지만
    Legacy Plus의 실제 인챈트는 `enigmaticlegacyplus:eternal_binding_curse`. ID를 고친다.
-3. 포팅 중 같은 종류(존재하지 않는 ID·경로를 조용히 무시하는 코드)를 더 발견하면 고치고, 커밋 메시지와 README "Modifications"에 기록한다.
+3. **미완성 무기 4종 잔재** (사용자 결정: 제거): 아이템은 등록되지 않았는데 설정 JSON의 주사위 이벤트
+   `enigmaticdice_give_kyomu` / `_phoenix` / `_fire_crystal_greatsword` / `_fire_crystal_spear`(rarity 1000, 활성)가 남아 있어,
+   당첨되면 빈 아이템과 "선물" 메시지만 나온다. 이 4개 이벤트를 기본 설정에서 지우고, 남은 모델·텍스처·번역 키
+   (`item.enigmaticdice.<id>`, `tooltip.enigmaticdice.unfinished_item_*`)·`weapon_attributes/<id>.json`도 지운다.
+   주석 처리된 Kyomu 관련 코드(`KyomuNameplateOverlay`, `LivingHurtLowestHandler`의 Kyomu 부분)도 정리한다.
+   사용자 config 자동 갱신 기능이 있으므로, 기존 사용자 설정 파일에 남은 이 이벤트들이 어떻게 처리되는지 확인하고
+   존재하지 않는 아이템 ID를 가진 이벤트는 건너뛰도록(경고 로그) 방어 코드를 둔다.
+4. 포팅 중 같은 종류(존재하지 않는 ID·경로를 조용히 무시하는 코드)를 더 발견하면 고치고, 커밋 메시지와 README "Modifications"에 기록한다.
 
 ## 작업 순서
 
-1. `1.21.1` 브랜치 — 공통 작업: `.gitignore`(완료), README, LICENSE, `ko_kr.json`, 버그 수정 1·2, 미사용 jar 의존성 제거, `mod_authors`.
+1. `1.21.1` 브랜치 — 공통 작업: `.gitignore`(완료), README, LICENSE, `ko_kr.json`, 버그 수정 1~3, 미사용 jar 의존성 제거, `mod_authors`.
    `./gradlew build` 통과 확인.
 2. `26.1.2` 브랜치 분기 — 빌드 설정 교체(Gradle wrapper, ModDevGradle, Java 25, neo/curios 버전, Parchment 제거,
    `mod_version=26.1.2-1.4.3`, mods.toml 버전 범위: `minecraft [26.1.2]`, `curios [15.0.0+26.1.2,)`,
