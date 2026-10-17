@@ -3,7 +3,8 @@
 	"texture_size": [32, 32],
 	"textures": {
 		"1": "enigmaticdice:item/moon_1",
-		"2": "enigmaticdice:item/moon_2"
+		"2": "enigmaticdice:item/moon_2",
+		"particle": "enigmaticdice:item/moon_1"
 	},
 	"elements": [
 		{
