@@ -23,9 +23,6 @@ repositories {
             includeGroup "curse.maven"
         }
     }
-    flatDir {
-        dirs 'libs'
-    }
 }
 
 base {
@@ -81,8 +78,6 @@ configurations {
 dependencies {
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
-
-    compileOnly files('libs/enigmaticlegacyplus-1.21.1-0.6.0.jar')
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
