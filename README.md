@@ -37,11 +37,14 @@ This repository **modifies** JrDemiurge's Enigmatic Dice (1.3.1-1.20.1). The mod
     Die events whose item does not exist (for example from an older config file) are skipped with a warning
     instead of dropping an empty item.
   - Korean translation (`ko_kr.json`), using the terms of the Legacy Plus Korean translation.
+  - Giant's Ring and Moai Charm attribute bonuses (health, damage, speed, knockback resistance) are applied again;
+    the 1.21.1 port overrode a Curios method that Curios no longer calls. Only one Giant's Ring counts, as in the
+    original: a second one cannot be equipped, and removing one ring no longer strips the size bonus of the other.
 - Porting the mod from Minecraft 1.21.1 / NeoForge 21.1 to **Minecraft 26.1.2 / NeoForge 26.1.2** (branch `26.1.2`),
   with Curios 15. Notable changes:
   - Swords are plain items with `Item.Properties#sword(ToolMaterial.NETHERITE, ...)`; tooltips, cooldowns, item
     ticking and curio hooks use their 26.1.2 signatures; item model definitions live in `assets/enigmaticdice/items`.
-  - Giant's Ring and Moai Charm provide their attribute bonuses through Curios 15 default curio modifiers.
+  - Curio attribute bonuses use Curios 15 default curio modifiers.
   - The day-cycle die event advances the overworld world clock (26.1 clocks are synced to clients), so the old
     client-side time packet is gone.
   - Size scaling (Giant's Ring, shrink events) scales the entity render state; player dimensions are adjusted on
