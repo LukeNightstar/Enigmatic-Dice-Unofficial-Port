@@ -30,3 +30,4 @@ src/generated
 
 # local jars
 libs/*.jar
+run-server

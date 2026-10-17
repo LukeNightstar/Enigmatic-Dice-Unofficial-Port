@@ -38,11 +38,17 @@ neoForge {
     runs {
         client {
             client()
+            // Dev convenience: -PquickPlayServer=localhost:25565 joins that server on launch as 'Dev'.
+            if (project.hasProperty('quickPlayServer')) {
+                programArguments.addAll '--quickPlayMultiplayer', project.property('quickPlayServer').toString(), '--username', 'Dev'
+            }
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
         server {
             server()
+            // Separate directory so a dev client and server can run side by side.
+            gameDirectory = project.file('run-server')
             programArgument '--nogui'
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
