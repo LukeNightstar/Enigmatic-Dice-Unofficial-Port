@@ -12,11 +12,7 @@
   "item.enigmaticdice.ring_of_agility": "§dRing of Agility",
   "item.enigmaticdice.divine_shield": "§dDivine Shield",
   "item.enigmaticdice.permafrost": "§dPermafrost",
-  "item.enigmaticdice.kyomu": "§d???",
-  "item.enigmaticdice.phoenix": "§d???",
   "item.enigmaticdice.crucible_of_rile": "§dCrucible of Rile",
-  "item.enigmaticdice.fire_crystal_greatsword": "§d???",
-  "item.enigmaticdice.fire_crystal_spear": "§d???",
   "item.enigmaticdice.moai_charm": "§dMoai Charm",
 
   "stat.enigmaticdice.obtained_dice_from_block": "Enigmatic Dice From Blocks",
@@ -36,12 +32,6 @@
   "tooltip.enigmaticdice.enigmatic_die_2": "§5Causes a random §6event§5 when used.",
   "tooltip.enigmaticdice.enigmatic_die_3": "§4Do not use at home!",
 
-  "tooltip.enigmaticdice.unfinished_item_1": "§dUnfinished:",
-  "tooltip.enigmaticdice.unfinished_item_2": "§6The fate§5 of this item §6is yet unwritten.",
-  "tooltip.enigmaticdice.unfinished_item_3": "§5Perhaps the key lies in §6your imagination?",
-  "tooltip.enigmaticdice.unfinished_item_4": "§dOn Use:",
-  "tooltip.enigmaticdice.unfinished_item_5": "§5Opens the gates to §6Demiurge's Forge.",
-  "tooltip.enigmaticdice.unfinished_item_discord": "§6Share your idea:",
 
   "tooltip.enigmaticdice.unequal_exchange_0": "§dPower paid with life.",
   "tooltip.enigmaticdice.unequal_exchange_1": "§dOn hit:",

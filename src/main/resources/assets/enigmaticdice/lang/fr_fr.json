@@ -12,11 +12,7 @@
   "item.enigmaticdice.ring_of_agility": "§dAnneau d'Agilité",
   "item.enigmaticdice.divine_shield": "§dBouclier Divin",
   "item.enigmaticdice.permafrost": "§dPergélisol",
-  "item.enigmaticdice.kyomu": "§d???",
-  "item.enigmaticdice.phoenix": "§d???",
   "item.enigmaticdice.crucible_of_rile": "§dCreuset de la Colère",
-  "item.enigmaticdice.fire_crystal_greatsword": "§d???",
-  "item.enigmaticdice.fire_crystal_spear": "§d???",
   "item.enigmaticdice.moai_charm": "§dAmulette Moai",
 
   "stat.enigmaticdice.obtained_dice_from_block": "Dés des blocs",
@@ -36,12 +32,6 @@
   "tooltip.enigmaticdice.enigmatic_die_2": "§5Déclenche un §6événement§5 aléatoire lorsqu'il est utilisé.",
   "tooltip.enigmaticdice.enigmatic_die_3": "§4Ne l'utilisez pas chez vous !",
 
-  "tooltip.enigmaticdice.unfinished_item_1": "§dInachevé :",
-  "tooltip.enigmaticdice.unfinished_item_2": "§6Le destin§5 de cet objet §6n’est pas encore écrit.",
-  "tooltip.enigmaticdice.unfinished_item_3": "§5Peut-être que la clé se trouve dans §6ton imagination ?",
-  "tooltip.enigmaticdice.unfinished_item_4": "§dLors de l’utilisation :",
-  "tooltip.enigmaticdice.unfinished_item_5": "§5Ouvre les portes de §6Demiurge's Forge.",
-  "tooltip.enigmaticdice.unfinished_item_discord": "§6Partage ton idée :",
 
   "tooltip.enigmaticdice.unequal_exchange_0": "§dPuissance payée avec la vie.",
   "tooltip.enigmaticdice.unequal_exchange_1": "§dLors de l'attaque :",

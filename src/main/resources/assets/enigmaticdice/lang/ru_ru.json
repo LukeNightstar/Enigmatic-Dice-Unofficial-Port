@@ -12,11 +12,7 @@
   "item.enigmaticdice.ring_of_agility": "§dКольцо ловкости",
   "item.enigmaticdice.divine_shield": "§dБожественный щит",
   "item.enigmaticdice.permafrost": "§dВечная мерзлота",
-  "item.enigmaticdice.kyomu": "§d???",
-  "item.enigmaticdice.phoenix": "§d???",
   "item.enigmaticdice.crucible_of_rile": "§dГорнило гнева",
-  "item.enigmaticdice.fire_crystal_greatsword": "§d???",
-  "item.enigmaticdice.fire_crystal_spear": "§d???",
   "item.enigmaticdice.moai_charm": "§dАмулет Моаи",
 
   "stat.enigmaticdice.obtained_dice_from_block": "Игральных костей из блоков",
@@ -36,12 +32,6 @@
   "tooltip.enigmaticdice.enigmatic_die_2": "§5Вызывает случайное §6событие§5 при использовании.",
   "tooltip.enigmaticdice.enigmatic_die_3": "§4Не используйте дома!",
 
-  "tooltip.enigmaticdice.unfinished_item_1": "§dНезавершённый:",
-  "tooltip.enigmaticdice.unfinished_item_2": "§6Судьба§5 этого предмета §6ещё не написана.",
-  "tooltip.enigmaticdice.unfinished_item_3": "§5Возможно, ключ к ней в §6твоём воображении?",
-  "tooltip.enigmaticdice.unfinished_item_4": "§dПри использовании:",
-  "tooltip.enigmaticdice.unfinished_item_5": "§5Открывает врата в §6Demiurge's Forge.",
-  "tooltip.enigmaticdice.unfinished_item_discord": "§6Поведай свою идею:",
 
   "tooltip.enigmaticdice.unequal_exchange_0": "§dСила, оплаченная жизнью.",
   "tooltip.enigmaticdice.unequal_exchange_1": "§dПри ударе:",

@@ -12,11 +12,7 @@
   "item.enigmaticdice.ring_of_agility": "§dAnillo de Agilidad",
   "item.enigmaticdice.divine_shield": "§dEscudo Divino",
   "item.enigmaticdice.permafrost": "§dPermafrost",
-  "item.enigmaticdice.kyomu": "§d???",
-  "item.enigmaticdice.phoenix": "§d???",
   "item.enigmaticdice.crucible_of_rile": "§dCrisol de la Ira",
-  "item.enigmaticdice.fire_crystal_greatsword": "§d???",
-  "item.enigmaticdice.fire_crystal_spear": "§d???",
   "item.enigmaticdice.moai_charm": "§dAmuleto Moai",
 
   "stat.enigmaticdice.obtained_dice_from_block": "Dados de bloques",
@@ -36,12 +32,6 @@
   "tooltip.enigmaticdice.enigmatic_die_2": "§5Causa un §6evento§5 aleatorio al usarse.",
   "tooltip.enigmaticdice.enigmatic_die_3": "§4¡No lo uses en casa!",
 
-  "tooltip.enigmaticdice.unfinished_item_1": "§dInacabado:",
-  "tooltip.enigmaticdice.unfinished_item_2": "§6El destino§5 de este objeto §6aún no está escrito.",
-  "tooltip.enigmaticdice.unfinished_item_3": "§5Quizás la clave esté en §6tu imaginación.",
-  "tooltip.enigmaticdice.unfinished_item_4": "§dAl usar:",
-  "tooltip.enigmaticdice.unfinished_item_5": "§5Abre las puertas a §6Demiurge's Forge.",
-  "tooltip.enigmaticdice.unfinished_item_discord": "§6Comparte tu idea:",
 
   "tooltip.enigmaticdice.unequal_exchange_0": "§dPoder pagado con la vida.",
   "tooltip.enigmaticdice.unequal_exchange_1": "§dAl golpear:",

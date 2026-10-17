@@ -90,9 +90,20 @@ public class RandomEventManager {
                 continue;
             }
 
+            if (!isKnownItem(config.item)) {
+                EnigmaticDice.LOGGER.warn("Skipping event {}: unknown item {}", eventName, config.item);
+                continue;
+            }
+
             events.add(new GiveItemEvent(config.item, config.rarity, config.amount, config.nbt, config.chatMessage));
             eventNames.add(eventName);
         }
+    }
+
+    // Configs written by older versions can still name items that no longer exist.
+    private static boolean isKnownItem(String id) {
+        ResourceLocation location = id == null ? null : ResourceLocation.tryParse(id);
+        return location != null && BuiltInRegistries.ITEM.containsKey(location);
     }
 
     private void loadResourceEvents() {
@@ -107,6 +118,11 @@ public class RandomEventManager {
 
             if (!ModList.get().isLoaded(config.requiredMod)) {
                 EnigmaticDice.LOGGER.debug("Skipping resource event {}: required mod {} is missing.", eventName, config.requiredMod);
+                continue;
+            }
+
+            if (!isKnownItem(config.item)) {
+                EnigmaticDice.LOGGER.warn("Skipping event {}: unknown item {}", eventName, config.item);
                 continue;
             }
 
