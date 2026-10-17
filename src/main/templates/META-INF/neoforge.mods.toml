@@ -29,13 +29,13 @@ config="${mod_id}.mixins.json"
 [[dependencies.${mod_id}]]
     modId="curios"
     type="required"
-    versionRange="[1.21.1-9.5.0,)"
+    versionRange="[15.0.0,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.${mod_id}]]
     modId="enigmaticlegacyplus"
     type="required"
-    versionRange="[1.21.1-0.6.0,)"
+    versionRange="[26.1.2-1.1.2,)"
     ordering="AFTER"
     side="BOTH"

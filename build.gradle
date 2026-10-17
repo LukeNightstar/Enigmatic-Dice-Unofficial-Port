@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.99'
+    id 'net.neoforged.moddev' version '2.0.148'
     id 'idea'
 }
 
@@ -18,9 +18,9 @@ repositories {
         url = "https://maven.theillusivec4.top/"
     }
     maven {
-        url "https://cursemaven.com"
+        url "https://api.modrinth.com/maven"
         content {
-            includeGroup "curse.maven"
+            includeGroup "maven.modrinth"
         }
     }
 }
@@ -29,15 +29,11 @@ base {
     archivesName = mod_id
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 neoForge {
     version = project.neo_version
 
-    parchment {
-        mappingsVersion = project.parchment_mappings_version
-        minecraftVersion = project.parchment_minecraft_version
-    }
 
     runs {
         client {
@@ -52,7 +48,7 @@ neoForge {
         }
 
         data {
-            data()
+            clientData()
             programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
         }
 
@@ -78,6 +74,11 @@ configurations {
 dependencies {
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+
+    // Dev runs only: Enigmatic Legacy Plus 26.1.2 (built from LukeNightstar/Enigmatic-Legacy-Plus, branch 26.1.2,
+    // copied into libs/) and its Patchouli dependency. Dice only refers to Legacy Plus by registry ids.
+    localRuntime files('libs/enigmaticlegacyplus-26.1.2-1.1.2.jar')
+    localRuntime "maven.modrinth:patchouli:${patchouli_version}"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
