@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -38,7 +38,7 @@ public class BroodAwakensEvent extends RandomEvent {
         }
 
         // Try to get the OBSESSION effect from Born in Chaos mod via registry
-        var obsessionEffect = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.parse("born_in_chaos_v1:obsession"));
+        var obsessionEffect = BuiltInRegistries.MOB_EFFECT.getHolder(Identifier.parse("born_in_chaos_v1:obsession"));
 
         for (int i = 0; i < 2; i++) {
             EntityType<?> entityType = EntityType.byString("born_in_chaos_v1:swarmer").orElse(null);
@@ -47,7 +47,7 @@ public class BroodAwakensEvent extends RandomEvent {
             Entity entity = entityType.create(pLevel);
             if (entity == null) return false;
 
-            entity.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
+            entity.snapTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
             pLevel.addFreshEntity(entity);
 
             if (entity instanceof Mob mob) {
@@ -77,12 +77,12 @@ public class BroodAwakensEvent extends RandomEvent {
             Entity entity = entityType.create(pLevel);
             if (entity == null) return false;
 
-            entity.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
+            entity.snapTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
             pLevel.addFreshEntity(entity);
         }
 
         MutableComponent message = Component.translatable("enigmaticdice.event.brood_awakens");
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

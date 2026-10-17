@@ -26,8 +26,8 @@ public class TeleportToWorldEdgeEvent extends RandomEvent {
         }
 
         try {
-            boolean xEdge = pLevel.random.nextBoolean();
-            boolean positive = pLevel.random.nextBoolean();
+            boolean xEdge = pLevel.getRandom().nextBoolean();
+            boolean positive = pLevel.getRandom().nextBoolean();
 
             double borderHalfSize = serverLevel.getWorldBorder().getSize() / 2.0 - 10.0;
             double borderCenterX = serverLevel.getWorldBorder().getCenterX();
@@ -52,7 +52,7 @@ public class TeleportToWorldEdgeEvent extends RandomEvent {
             pPlayer.teleportTo(targetX + 0.5, surfaceY + 1, targetZ + 0.5);
 
             MutableComponent message = Component.translatable("enigmaticdice.event.teleport_to_world_edge");
-            pPlayer.displayClientMessage(message, false);
+            pPlayer.sendSystemMessage(message);
             return true;
 
         } catch (Exception e) {

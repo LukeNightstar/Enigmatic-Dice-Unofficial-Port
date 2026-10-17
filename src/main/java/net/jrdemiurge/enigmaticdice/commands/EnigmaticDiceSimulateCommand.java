@@ -15,7 +15,7 @@ public class EnigmaticDiceSimulateCommand {
 
     public static LiteralArgumentBuilder<CommandSourceStack> create() {
         return Commands.literal("enigmaticDiceSimulate")
-                .requires(source -> source.hasPermission(2))
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(Commands.argument("count", IntegerArgumentType.integer(1))
                         .executes(EnigmaticDiceSimulateCommand::simulateEvents));
     }
@@ -31,8 +31,8 @@ public class EnigmaticDiceSimulateCommand {
 
         EnigmaticDice.eventManager.simulationRandomEvent(pLevel, pPlayer, count);
         EnigmaticDice.eventManager.saveLuckRangeResultsToFile(pLevel, EnigmaticDice.eventManager.buildLuckRangeResults(pLevel, count), count);
-        pPlayer.displayClientMessage(Component.literal("Simulated " + count + " events successfully!"), false);
-        pPlayer.displayClientMessage(Component.literal("Results saved in the world folder as: enigmatic_dice_simulation_results.txt and enigmatic_dice_luck_range_results.txt"), false);
+        pPlayer.sendSystemMessage(Component.literal("Simulated " + count + " events successfully!"));
+        pPlayer.sendSystemMessage(Component.literal("Results saved in the world folder as: enigmatic_dice_simulation_results.txt and enigmatic_dice_luck_range_results.txt"));
         return 1;
     }
 }

@@ -91,7 +91,7 @@ public class GiveRandomPotionEvent extends RandomEvent {
         } else {
             message = Component.translatable("enigmaticdice.event.modded_random_potion");
         }
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

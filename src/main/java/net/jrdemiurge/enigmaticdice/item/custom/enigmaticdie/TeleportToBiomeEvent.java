@@ -9,7 +9,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -43,8 +43,8 @@ public class TeleportToBiomeEvent extends RandomEvent {
 
         List<String> validBiomes = allBiomes.stream()
                 .filter(biomeId -> {
-                    ResourceLocation biomeLocation = ResourceLocation.parse(biomeId);
-                    return serverLevel.registryAccess().registryOrThrow(Registries.BIOME).containsKey(biomeLocation);
+                    Identifier biomeLocation = Identifier.parse(biomeId);
+                    return serverLevel.registryAccess().lookupOrThrow(Registries.BIOME).containsKey(biomeLocation);
                 })
                 .toList();
 
@@ -53,10 +53,10 @@ public class TeleportToBiomeEvent extends RandomEvent {
             return false;
         }
 
-        String biomeIdentifier = validBiomes.get(pLevel.random.nextInt(validBiomes.size()));
+        String biomeIdentifier = validBiomes.get(pLevel.getRandom().nextInt(validBiomes.size()));
 
         try {
-            ResourceLocation biomeLocation = ResourceLocation.parse(biomeIdentifier);
+            Identifier biomeLocation = Identifier.parse(biomeIdentifier);
             Pair<BlockPos, Holder<Biome>> biomePair = serverLevel.findClosestBiome3d(
                     biome -> biome.is(biomeLocation),
                     pPlayer.blockPosition(),
@@ -77,8 +77,8 @@ public class TeleportToBiomeEvent extends RandomEvent {
 
             pPlayer.teleportTo(biomePos.getX() + 0.5, surfaceY + 1, biomePos.getZ() + 0.5);
 
-            MutableComponent message = Component.translatable("enigmaticdice.event.teleport_to_biome." + pLevel.random.nextInt(6));
-            pPlayer.displayClientMessage(message, false);
+            MutableComponent message = Component.translatable("enigmaticdice.event.teleport_to_biome." + pLevel.getRandom().nextInt(6));
+            pPlayer.sendSystemMessage(message);
             return true;
 
         } catch (Exception e) {

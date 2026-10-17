@@ -25,11 +25,11 @@ public class GoldenRain extends RandomEvent{
 
         BlockPos pos = pPlayer.blockPosition();
 
-        pPlayer.displayClientMessage(Component.literal("\u00A7eIt looks like rain is coming."), false);
+        pPlayer.sendSystemMessage(Component.literal("\u00A7eIt looks like rain is coming."));
 
         for (int i = 0; i < NUM_GOLDEN_NUGGETS; i++) {
-            int offsetX = pLevel.random.nextInt(2*RADIUS +1) - RADIUS;
-            int offsetZ = pLevel.random.nextInt(2*RADIUS +1) - RADIUS;
+            int offsetX = pLevel.getRandom().nextInt(2*RADIUS +1) - RADIUS;
+            int offsetZ = pLevel.getRandom().nextInt(2*RADIUS +1) - RADIUS;
 
             BlockPos spawnPos = pos.offset(offsetX, 12, offsetZ);
 

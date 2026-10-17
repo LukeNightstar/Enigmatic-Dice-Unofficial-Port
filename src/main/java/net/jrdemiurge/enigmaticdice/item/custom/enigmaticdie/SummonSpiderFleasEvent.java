@@ -41,7 +41,7 @@ public class SummonSpiderFleasEvent extends RandomEvent {
             Spider spider = EntityType.SPIDER.create(pLevel);
             if (spider == null) continue;
 
-            spider.moveTo(targetX, targetY, targetZ, 0.0F, 0.0F);
+            spider.snapTo(targetX, targetY, targetZ, 0.0F, 0.0F);
 
             AttributeInstance sizeAttr = spider.getAttribute(ModAttributes.SIZE_SCALE);
             if (sizeAttr != null) {
@@ -56,7 +56,7 @@ public class SummonSpiderFleasEvent extends RandomEvent {
         }
 
         MutableComponent message = Component.translatable("enigmaticdice.event.summon_spider_fleas");
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

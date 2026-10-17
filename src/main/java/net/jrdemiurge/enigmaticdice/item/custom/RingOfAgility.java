@@ -4,7 +4,6 @@ import net.jrdemiurge.enigmaticdice.Config;
 import net.jrdemiurge.enigmaticdice.item.ModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -17,8 +16,9 @@ import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
-import java.util.List;
 import java.util.Random;
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 
 public class RingOfAgility extends Item implements ICurioItem {
     private static final Random RANDOM = new Random();
@@ -54,8 +54,8 @@ public class RingOfAgility extends Item implements ICurioItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        if (Screen.hasShiftDown()) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, TooltipDisplay pTooltipDisplay, Consumer<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+        if (Minecraft.getInstance().hasShiftDown()) {
             double dodgeChance;
             if (Minecraft.getInstance().player != null) {
                 var movementSpeedAttr = Minecraft.getInstance().player.getAttribute(Attributes.MOVEMENT_SPEED);
@@ -69,12 +69,12 @@ public class RingOfAgility extends Item implements ICurioItem {
             }
             String formattedChance = String.format("%.1f", dodgeChance * 100);
 
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.ring_of_agility_1", formattedChance)
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.ring_of_agility_1", formattedChance)
                         .withStyle(ChatFormatting.GOLD));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.ring_of_agility_2"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.ring_of_agility_2"));
         } else {
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.ring_of_agility_0"));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.holdShift"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.ring_of_agility_0"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.holdShift"));
         }
     }
 }

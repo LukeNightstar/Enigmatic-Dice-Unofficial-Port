@@ -1,18 +1,14 @@
 package net.jrdemiurge.enigmaticdice.entity.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.entity.state.ArrowRenderState;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.world.entity.Entity;
 
-public class DragonclawHookModel<T extends Entity> extends HierarchicalModel<T> {
-    private final ModelPart root;
-
+public class DragonclawHookModel extends EntityModel<ArrowRenderState> {
     public DragonclawHookModel(ModelPart root) {
-        this.root = root.getChild("root");
+        super(root);
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -39,20 +35,5 @@ public class DragonclawHookModel<T extends Entity> extends HierarchicalModel<T> 
         PartDefinition cube_r8 = bb_main.addOrReplaceChild("cube_r8", CubeListBuilder.create().texOffs(0, 22).addBox(-2.0F, -4.0F, -1.0F, 4.0F, 4.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.2F, 0.1F, 5.3F, 0.0F, -0.3054F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
-    }
-
-    @Override
-    public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.root().getAllParts().forEach(ModelPart::resetPose);
-    }
-
-    @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-        root.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-    }
-
-    @Override
-    public ModelPart root() {
-        return this.root;
     }
 }

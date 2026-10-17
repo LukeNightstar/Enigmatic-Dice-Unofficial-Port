@@ -7,19 +7,17 @@ import net.jrdemiurge.enigmaticdice.network.LookAtTargetPacket;
 import net.jrdemiurge.enigmaticdice.scheduler.Scheduler;
 import net.jrdemiurge.enigmaticdice.sound.ModSounds;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
@@ -39,22 +37,26 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
+import net.minecraft.world.InteractionResult;
 
-public class CrucibleOfRile extends SwordItem {
+public class CrucibleOfRile extends Item {
     public static final String PDATA_RILE_HITS = "enigmaticdice_crucible_of_rile_hits";
     public static final String TAG_UNIQUE_KILLS = "enigmaticdice_crucible_of_rile_unique_kills";
-    private static final ResourceLocation ARMOR_MODIFIER_ID = EnigmaticDice.location("crucible_of_rile_armor");
-    private static final ResourceLocation ARMOR_TOUGHNESS_MODIFIER_ID = EnigmaticDice.location("crucible_of_rile_armor_toughness");
-    private static final ResourceLocation ARMOR_BOOST_ID = EnigmaticDice.location("crucible_of_rile_use_armor_buff");
-    private static final ResourceLocation TOUGHNESS_BOOST_ID = EnigmaticDice.location("crucible_of_rile_use_armor_toughness_buff");
+    private static final Identifier ARMOR_MODIFIER_ID = EnigmaticDice.location("crucible_of_rile_armor");
+    private static final Identifier ARMOR_TOUGHNESS_MODIFIER_ID = EnigmaticDice.location("crucible_of_rile_armor_toughness");
+    private static final Identifier ARMOR_BOOST_ID = EnigmaticDice.location("crucible_of_rile_use_armor_buff");
+    private static final Identifier TOUGHNESS_BOOST_ID = EnigmaticDice.location("crucible_of_rile_use_armor_toughness_buff");
 
-    public CrucibleOfRile(Tier pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties) {
-        super(pTier, pProperties.attributes(SwordItem.createAttributes(pTier, pAttackDamageModifier, pAttackSpeedModifier)));
+    public CrucibleOfRile(Properties pProperties) {
+        super(pProperties);
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (!attacker.level().isClientSide && attacker instanceof Player player) {
+    public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        if (!attacker.level().isClientSide() && attacker instanceof Player player) {
 
             player.level().playSound(null, target.getX(), target.getY(), target.getZ(),
                     ModSounds.CRUCIBLE_OF_RILE_ATTACK.get(), SoundSource.PLAYERS, 0.5F, 1.0F);
@@ -67,13 +69,13 @@ public class CrucibleOfRile extends SwordItem {
                 }
             }
         }
-        return super.hurtEnemy(stack, target, attacker);
+        super.hurtEnemy(stack, target, attacker);
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
+    public InteractionResult use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         ItemStack item = pPlayer.getItemInHand(pUsedHand);
-        if (pLevel.isClientSide) return InteractionResultHolder.pass(item);
+        if (pLevel.isClientSide()) return InteractionResult.PASS;
 
         aggroMobsAndLockPlayers((ServerLevel) pLevel, (ServerPlayer) pPlayer);
 
@@ -82,8 +84,8 @@ public class CrucibleOfRile extends SwordItem {
         pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(),
                 ModSounds.CRUCIBLE_OF_RILE_USE.get(), SoundSource.PLAYERS, 0.5F, 1.0F);
 
-        pPlayer.getCooldowns().addCooldown(this, Config.CrucibleOfRileCooldown);
-        return InteractionResultHolder.success(item);
+        pPlayer.getCooldowns().addCooldown(item, Config.CrucibleOfRileCooldown);
+        return InteractionResult.SUCCESS;
     }
 
     public static void aggroMobsAndLockPlayers(ServerLevel level, ServerPlayer caster) {
@@ -173,7 +175,7 @@ public class CrucibleOfRile extends SwordItem {
 
     public static void handleOnOwnerAttacked(LivingEntity livingEntity) {
         CompoundTag data = livingEntity.getPersistentData();
-        int hits = data.getInt(PDATA_RILE_HITS) + 1;
+        int hits = data.getIntOr(PDATA_RILE_HITS, 0) + 1;
 
         if (hits >= Config.CrucibleOfRileHitsForCounterattack) {
             data.putInt(PDATA_RILE_HITS, 0);
@@ -186,7 +188,6 @@ public class CrucibleOfRile extends SwordItem {
     private static void doAoEDamage(LivingEntity livingEntity) {
         livingEntity.level().playSound(null, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(),
                 ModSounds.CRUCIBLE_OF_RILE_HELIX.get(), SoundSource.PLAYERS, 0.5F, 1.0F);
-
 
         AABB box = livingEntity.getBoundingBox().inflate(Config.CrucibleOfRileCounterattackRadius);
 
@@ -213,10 +214,7 @@ public class CrucibleOfRile extends SwordItem {
         Set<String> set = new HashSet<>();
         CustomData customData = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
         CompoundTag tag = customData.copyTag();
-        if (tag.contains(TAG_UNIQUE_KILLS, Tag.TAG_LIST)) {
-            ListTag list = tag.getList(TAG_UNIQUE_KILLS, Tag.TAG_STRING);
-            for (Tag t : list) set.add(t.getAsString());
-        }
+        for (Tag t : tag.getListOrEmpty(TAG_UNIQUE_KILLS)) t.asString().ifPresent(set::add);
         return set;
     }
 
@@ -235,19 +233,9 @@ public class CrucibleOfRile extends SwordItem {
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return true;
-    }
-
-    @Override
-    public int getEnchantmentValue() {
-        return 15;
-    }
-
-    @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        if (Screen.hasShiftDown()) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, TooltipDisplay pTooltipDisplay, Consumer<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+        if (Minecraft.getInstance().hasShiftDown()) {
             double crucibleOfRileExecuteThreshold = Config.CrucibleOfRileExecuteThreshold;
             double crucibleOfRileAggroRadius = Config.CrucibleOfRileAggroRadius;
             double crucibleOfRileArmorBuffValue = Config.CrucibleOfRileArmorBuffValue * 100;
@@ -255,27 +243,27 @@ public class CrucibleOfRile extends SwordItem {
             int crucibleOfRileHitsForCounterattack = Config.CrucibleOfRileHitsForCounterattack;
             double crucibleOfRileCounterattackRadius = Config.CrucibleOfRileCounterattackRadius;
             double crucibleOfRilePermanentArmorPerUnique = Config.CrucibleOfRilePermanentArmorPerUnique * 100;
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.on_use"));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.crucible_of_rile_1", crucibleOfRileAggroRadius)
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.on_use"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.crucible_of_rile_1", crucibleOfRileAggroRadius)
                     .withStyle(ChatFormatting.GOLD));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.crucible_of_rile_2", crucibleOfRileArmorBuffValue, crucibleOfRileArmorBuffDuration)
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.crucible_of_rile_2", crucibleOfRileArmorBuffValue, crucibleOfRileArmorBuffDuration)
                     .withStyle(ChatFormatting.GOLD));
-            pTooltipComponents.add(Component.literal(" "));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.crucible_of_rile_3", crucibleOfRileHitsForCounterattack)
+            pTooltipComponents.accept(Component.literal(" "));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.crucible_of_rile_3", crucibleOfRileHitsForCounterattack)
                     .withStyle(ChatFormatting.GOLD));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.crucible_of_rile_4", crucibleOfRileCounterattackRadius)
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.crucible_of_rile_4", crucibleOfRileCounterattackRadius)
                     .withStyle(ChatFormatting.GOLD));
-            pTooltipComponents.add(Component.literal(" "));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.on_hit"));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.crucible_of_rile_5", crucibleOfRileExecuteThreshold)
+            pTooltipComponents.accept(Component.literal(" "));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.on_hit"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.crucible_of_rile_5", crucibleOfRileExecuteThreshold)
                     .withStyle(ChatFormatting.GOLD));
-            pTooltipComponents.add(Component.literal(" "));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.crucible_of_rile_6"));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.crucible_of_rile_7", crucibleOfRilePermanentArmorPerUnique)
+            pTooltipComponents.accept(Component.literal(" "));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.crucible_of_rile_6"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.crucible_of_rile_7", crucibleOfRilePermanentArmorPerUnique)
                     .withStyle(ChatFormatting.GOLD));
         } else {
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.holdShift"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.holdShift"));
         }
-        super.appendHoverText(pStack, pContext, pTooltipComponents, pIsAdvanced);
+        super.appendHoverText(pStack, pContext, pTooltipDisplay, pTooltipComponents, pIsAdvanced);
     }
 }

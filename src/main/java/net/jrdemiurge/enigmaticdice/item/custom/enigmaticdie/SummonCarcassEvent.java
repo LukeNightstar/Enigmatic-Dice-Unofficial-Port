@@ -41,14 +41,14 @@ public class SummonCarcassEvent extends RandomEvent {
                 Entity entity = entityType.create(pLevel);
                 if (entity == null) return;
 
-                entity.moveTo(pos.x, pos.y, pos.z, 0, 0);
+                entity.snapTo(pos.x, pos.y, pos.z, 0, 0);
                 pLevel.addFreshEntity(entity);
 
             }, 10 * i);
         }
 
         MutableComponent message = Component.translatable("enigmaticdice.event.carcass");
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

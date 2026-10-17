@@ -29,7 +29,7 @@ public class LightningStrikeEvent extends RandomEvent {
         BlockPos strikePos = pLevel.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, pos);
 
         LightningBolt lightningBolt = new LightningBolt(EntityType.LIGHTNING_BOLT, pLevel);
-        lightningBolt.moveTo(strikePos.getX(), strikePos.getY(), strikePos.getZ());
+        lightningBolt.snapTo(strikePos.getX(), strikePos.getY(), strikePos.getZ());
         pLevel.addFreshEntity(lightningBolt);
 
         int sum = 0;
@@ -40,25 +40,25 @@ public class LightningStrikeEvent extends RandomEvent {
 
             Scheduler.schedule(() -> {
 
-                int offsetX = pLevel.random.nextInt(2*RADIUS +1) - RADIUS;
-                int offsetZ = pLevel.random.nextInt(2*RADIUS +1) - RADIUS;
+                int offsetX = pLevel.getRandom().nextInt(2*RADIUS +1) - RADIUS;
+                int offsetZ = pLevel.getRandom().nextInt(2*RADIUS +1) - RADIUS;
                 BlockPos strikePos_2 = pLevel.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, pos.offset(offsetX, 0, offsetZ));
 
                 LightningBolt lightningBolt_2 = new LightningBolt(EntityType.LIGHTNING_BOLT, pLevel);
-                lightningBolt_2.moveTo(strikePos_2.getX(), strikePos_2.getY(), strikePos_2.getZ());
+                lightningBolt_2.snapTo(strikePos_2.getX(), strikePos_2.getY(), strikePos_2.getZ());
                 pLevel.addFreshEntity(lightningBolt_2);
 
-                offsetX = pLevel.random.nextInt(2*RADIUS +1) - RADIUS;
-                offsetZ = pLevel.random.nextInt(2*RADIUS +1) - RADIUS;
+                offsetX = pLevel.getRandom().nextInt(2*RADIUS +1) - RADIUS;
+                offsetZ = pLevel.getRandom().nextInt(2*RADIUS +1) - RADIUS;
                 strikePos_2 = pLevel.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, pos.offset(offsetX, 0, offsetZ));
 
                 LightningBolt lightningBolt_3 = new LightningBolt(EntityType.LIGHTNING_BOLT, pLevel);
-                lightningBolt_3.moveTo(strikePos_2.getX(), strikePos_2.getY(), strikePos_2.getZ());
+                lightningBolt_3.snapTo(strikePos_2.getX(), strikePos_2.getY(), strikePos_2.getZ());
                 pLevel.addFreshEntity(lightningBolt_3);
             }, delay);
         }
 
-        pPlayer.displayClientMessage(Component.translatable("enigmaticdice.event.lightning_wrath"), false);
+        pPlayer.sendSystemMessage(Component.translatable("enigmaticdice.event.lightning_wrath"));
         return true;
     }
 }

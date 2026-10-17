@@ -1,18 +1,19 @@
 package net.jrdemiurge.enigmaticdice.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.jrdemiurge.enigmaticdice.EnigmaticDice;
 import net.jrdemiurge.enigmaticdice.entity.custom.DragonclawHookEntity;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.state.ArrowRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
+import net.minecraft.resources.Identifier;
 
-public class DragonclawHookRender extends EntityRenderer<DragonclawHookEntity> {
+public class DragonclawHookRender extends EntityRenderer<DragonclawHookEntity, ArrowRenderState> {
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(EnigmaticDice.MOD_ID, "textures/entity/dragonclaw_hook.png");
     private final DragonclawHookModel model;
 
     public DragonclawHookRender(EntityRendererProvider.Context pContext) {
@@ -21,23 +22,27 @@ public class DragonclawHookRender extends EntityRenderer<DragonclawHookEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(DragonclawHookEntity pEntity) {
-        return ResourceLocation.fromNamespaceAndPath(EnigmaticDice.MOD_ID, "textures/entity/dragonclaw_hook.png");
+    public ArrowRenderState createRenderState() {
+        return new ArrowRenderState();
     }
 
     @Override
-    public void render(DragonclawHookEntity pEntity, float pEntityYaw, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
+    public void extractRenderState(DragonclawHookEntity pEntity, ArrowRenderState pState, float pPartialTick) {
+        super.extractRenderState(pEntity, pState, pPartialTick);
+        pState.yRot = pEntity.getYRot(pPartialTick);
+        pState.xRot = pEntity.getXRot(pPartialTick);
+    }
+
+    @Override
+    public void submit(ArrowRenderState pState, PoseStack pPoseStack, SubmitNodeCollector pCollector, CameraRenderState pCamera) {
         pPoseStack.pushPose();
 
-        float yRot = Mth.lerp(pPartialTick, pEntity.yRotO, pEntity.getYRot());
-        float xRot = Mth.lerp(pPartialTick, pEntity.xRotO, pEntity.getXRot());
-
-        pPoseStack.mulPose(Axis.YP.rotationDegrees(yRot - 90.0F));
-        pPoseStack.mulPose(Axis.ZP.rotationDegrees(xRot + 90.0F));
+        pPoseStack.mulPose(Axis.YP.rotationDegrees(pState.yRot - 90.0F));
+        pPoseStack.mulPose(Axis.ZP.rotationDegrees(pState.xRot + 90.0F));
         pPoseStack.scale(0.65F, 0.65F, 0.65F);
-        VertexConsumer vertexConsumer = pBuffer.getBuffer(this.model.renderType(getTextureLocation(pEntity)));
-        model.renderToBuffer(pPoseStack, vertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY, -1);
+        pCollector.submitModel(this.model, pState, pPoseStack, TEXTURE, pState.lightCoords, OverlayTexture.NO_OVERLAY, pState.outlineColor, null);
 
         pPoseStack.popPose();
+        super.submit(pState, pPoseStack, pCollector, pCamera);
     }
 }

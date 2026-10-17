@@ -4,12 +4,11 @@ import net.jrdemiurge.enigmaticdice.Config;
 import net.jrdemiurge.enigmaticdice.EnigmaticDice;
 import net.jrdemiurge.enigmaticdice.item.ModItems;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -38,10 +37,13 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 
 public class GravityCore extends Item implements ICurioItem {
 
-    private static final ResourceLocation GRAVITY_BOOST_ID = EnigmaticDice.location("gravity_core_gravity_boost");
+    private static final Identifier GRAVITY_BOOST_ID = EnigmaticDice.location("gravity_core_gravity_boost");
     private static AttributeModifier GRAVITY_MODIFIER;
 
     private static final WeakHashMap<Player, Boolean> gravityActive = new WeakHashMap<>();
@@ -57,7 +59,7 @@ public class GravityCore extends Item implements ICurioItem {
     }
 
     public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack) {
-        if (slotContext.entity().level().isClientSide || !(slotContext.entity() instanceof Player player))
+        if (slotContext.entity().level().isClientSide() || !(slotContext.entity() instanceof Player player))
             return;
         if (GRAVITY_MODIFIER == null) {
             GRAVITY_MODIFIER = new AttributeModifier(GRAVITY_BOOST_ID, Config.GravityCoreGravityMultiplier - 1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
@@ -70,7 +72,7 @@ public class GravityCore extends Item implements ICurioItem {
 
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
-        if (slotContext.entity().level().isClientSide || !(slotContext.entity() instanceof Player player))
+        if (slotContext.entity().level().isClientSide() || !(slotContext.entity() instanceof Player player))
             return;
 
         if (player.isCreative() || player.isSpectator()) return;
@@ -157,12 +159,12 @@ public class GravityCore extends Item implements ICurioItem {
     }
 
     public static void jump(Player player) {
-        if (player.getCooldowns().isOnCooldown(ModItems.GRAVITY_CORE.get())) {
+        if (player.getCooldowns().isOnCooldown(ModItems.GRAVITY_CORE.toStack())) {
             return;
         }
 
         double jumpMultiplier = Config.GravityCoreJumpStrength;
-        double jumpBoostPower = player.hasEffect(MobEffects.JUMP) ? 0.1F * ((float)player.getEffect(MobEffects.JUMP).getAmplifier() + 1.0F) : 0.0F;
+        double jumpBoostPower = player.hasEffect(MobEffects.JUMP_BOOST) ? 0.1F * ((float)player.getEffect(MobEffects.JUMP_BOOST).getAmplifier() + 1.0F) : 0.0F;
         double jumpPower = (0.42 + jumpBoostPower) * jumpMultiplier;
 
         Vec3 vec3 = player.getDeltaMovement();
@@ -172,13 +174,13 @@ public class GravityCore extends Item implements ICurioItem {
             player.setDeltaMovement(player.getDeltaMovement().add((double)(-Mth.sin(f) * 0.2F * jumpMultiplier), 0.0D, (double)(Mth.cos(f) * 0.2F * jumpMultiplier)));
         }
 
-        player.hasImpulse = true;
+        player.needsSync = true;
         player.awardStat(Stats.JUMP);
 
         ((ServerPlayer) player).connection.send(new ClientboundSetEntityMotionPacket(player));
 
         if (Config.GravityCoreCooldown != 0) {
-            player.getCooldowns().addCooldown(ModItems.GRAVITY_CORE.get(), Config.GravityCoreCooldown);
+            player.getCooldowns().addCooldown(ModItems.GRAVITY_CORE.toStack(), Config.GravityCoreCooldown);
         }
     }
 
@@ -210,20 +212,20 @@ public class GravityCore extends Item implements ICurioItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        if (Screen.hasShiftDown()) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, TooltipDisplay pTooltipDisplay, Consumer<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+        if (Minecraft.getInstance().hasShiftDown()) {
             int gravityMultiplier = (int) Config.GravityCoreGravityMultiplier;
 
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.gravity_core_1"));
-            pTooltipComponents.add(Component.literal(" "));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.gravity_core_2", gravityMultiplier)
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.gravity_core_1"));
+            pTooltipComponents.accept(Component.literal(" "));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.gravity_core_2", gravityMultiplier)
                     .withStyle(ChatFormatting.GOLD));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.gravity_core_3"));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.gravity_core_4"));
-            pTooltipComponents.add(Component.literal(" "));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.gravity_core_5"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.gravity_core_3"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.gravity_core_4"));
+            pTooltipComponents.accept(Component.literal(" "));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.gravity_core_5"));
         } else {
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.holdShift"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.holdShift"));
         }
     }
 }

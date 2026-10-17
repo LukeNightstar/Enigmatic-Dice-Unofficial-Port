@@ -4,7 +4,7 @@ import net.jrdemiurge.enigmaticdice.EnigmaticDice;
 import net.jrdemiurge.enigmaticdice.item.custom.UnequalExchange;
 import net.jrdemiurge.enigmaticdice.item.custom.souleater.SoulEaterDataStorage;
 import net.jrdemiurge.enigmaticdice.item.custom.unequalexchange.UnequalExchangeDataStorage;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -16,18 +16,18 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 public class PlayerTickHandler {
 
     //unequal exchange
-    private static final ResourceLocation HEALTH_DEBUFF_ID = ResourceLocation.fromNamespaceAndPath("enigmaticdice", "health_debuff");
-    private static final ResourceLocation ATTACK_SPEED_DEBUFF_ID = ResourceLocation.fromNamespaceAndPath("enigmaticdice", "attack_speed_debuff");
-    private static final ResourceLocation ARMOR_DEBUFF_ID = ResourceLocation.fromNamespaceAndPath("enigmaticdice", "armor_debuff");
-    private static final ResourceLocation ARMOR_TOUGHNESS_DEBUFF_ID = ResourceLocation.fromNamespaceAndPath("enigmaticdice", "armor_toughness_debuff");
-    private static final ResourceLocation SPEED_DEBUFF_ID = ResourceLocation.fromNamespaceAndPath("enigmaticdice", "speed_debuff");
+    private static final Identifier HEALTH_DEBUFF_ID = Identifier.fromNamespaceAndPath("enigmaticdice", "health_debuff");
+    private static final Identifier ATTACK_SPEED_DEBUFF_ID = Identifier.fromNamespaceAndPath("enigmaticdice", "attack_speed_debuff");
+    private static final Identifier ARMOR_DEBUFF_ID = Identifier.fromNamespaceAndPath("enigmaticdice", "armor_debuff");
+    private static final Identifier ARMOR_TOUGHNESS_DEBUFF_ID = Identifier.fromNamespaceAndPath("enigmaticdice", "armor_toughness_debuff");
+    private static final Identifier SPEED_DEBUFF_ID = Identifier.fromNamespaceAndPath("enigmaticdice", "speed_debuff");
     //soul eater
-    private static final ResourceLocation SOUL_EATER_HEALTH_BUFF_ID = ResourceLocation.fromNamespaceAndPath("enigmaticdice", "soul_eater_health_buff");
+    private static final Identifier SOUL_EATER_HEALTH_BUFF_ID = Identifier.fromNamespaceAndPath("enigmaticdice", "soul_eater_health_buff");
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
-        if (!player.level().isClientSide) {
+        if (!player.level().isClientSide()) {
             // unequal exchange
             var data = UnequalExchangeDataStorage.get(player);
             data.tick();

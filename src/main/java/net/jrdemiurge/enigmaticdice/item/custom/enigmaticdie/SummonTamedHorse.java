@@ -39,7 +39,7 @@ public class SummonTamedHorse extends RandomEvent {
         Horse horse = EntityType.HORSE.create(pLevel);
         if (horse == null) return false;
 
-        horse.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
+        horse.snapTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
         horse.tameWithName(pPlayer);
         horse.equipSaddle(new ItemStack(net.minecraft.world.item.Items.SADDLE), SoundSource.NEUTRAL);
 
@@ -51,8 +51,8 @@ public class SummonTamedHorse extends RandomEvent {
 
         pLevel.addFreshEntity(horse);
 
-        MutableComponent message = Component.translatable("enigmaticdice.event.horse." + pLevel.random.nextInt(2));
-        pPlayer.displayClientMessage(message, false);
+        MutableComponent message = Component.translatable("enigmaticdice.event.horse." + pLevel.getRandom().nextInt(2));
+        pPlayer.sendSystemMessage(message);
 
         return true;
     }

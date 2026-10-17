@@ -11,7 +11,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -44,10 +44,10 @@ public class TeleportToStructureEvent extends RandomEvent {
             return false;
         }
 
-        Registry<Structure> structureRegistry = serverLevel.registryAccess().registryOrThrow(Registries.STRUCTURE);
+        Registry<Structure> structureRegistry = serverLevel.registryAccess().lookupOrThrow(Registries.STRUCTURE);
 
         List<String> validStructures = allStructures.stream()
-                .filter(id -> structureRegistry.containsKey(ResourceLocation.parse(id)))
+                .filter(id -> structureRegistry.containsKey(Identifier.parse(id)))
                 .toList();
 
         if (validStructures.isEmpty()) {
@@ -55,8 +55,8 @@ public class TeleportToStructureEvent extends RandomEvent {
             return false;
         }
 
-        String structureId = validStructures.get(pLevel.random.nextInt(validStructures.size()));
-        ResourceLocation structureRL = ResourceLocation.parse(structureId);
+        String structureId = validStructures.get(pLevel.getRandom().nextInt(validStructures.size()));
+        Identifier structureRL = Identifier.parse(structureId);
 
         try {
             Holder<Structure> structureHolder = structureRegistry.getHolder(structureRegistry.getResourceKey(
@@ -94,8 +94,8 @@ public class TeleportToStructureEvent extends RandomEvent {
                 );
             }
 
-            MutableComponent message = Component.translatable("enigmaticdice.event.teleport_to_structure." + pLevel.random.nextInt(4));
-            pPlayer.displayClientMessage(message, false);
+            MutableComponent message = Component.translatable("enigmaticdice.event.teleport_to_structure." + pLevel.getRandom().nextInt(4));
+            pPlayer.sendSystemMessage(message);
 
             return true;
         } catch (Exception e) {

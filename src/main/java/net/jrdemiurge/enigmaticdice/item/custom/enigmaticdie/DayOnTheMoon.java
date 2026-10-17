@@ -53,7 +53,7 @@ public class DayOnTheMoon extends RandomEvent {
         Scheduler.schedule(() -> activePlayers.remove(playerId), duration);
 
         MutableComponent message = Component.translatable("enigmaticdice.event.day_on_the_moon");
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

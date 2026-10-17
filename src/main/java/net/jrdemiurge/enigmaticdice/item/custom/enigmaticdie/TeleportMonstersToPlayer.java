@@ -38,7 +38,7 @@ public class TeleportMonstersToPlayer extends RandomEvent {
             if (!monsters.isEmpty()) {
                 Monster mob = monsters.remove(0);
                 if (mob.isAlive()) {
-                    double angle = serverLevel.random.nextDouble() * Math.PI * 2.0;
+                    double angle = serverLevel.getRandom().nextDouble() * Math.PI * 2.0;
                     double radius = 5.0;
 
                     double targetX = pPlayer.getX() + Math.cos(angle) * radius;
@@ -54,7 +54,7 @@ public class TeleportMonstersToPlayer extends RandomEvent {
         }, 0, 10, monsters.size());
 
         MutableComponent message = Component.translatable("enigmaticdice.event.teleport_monsters_to_player");
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

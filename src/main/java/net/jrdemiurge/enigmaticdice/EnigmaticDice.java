@@ -18,7 +18,7 @@ import net.jrdemiurge.enigmaticdice.network.TimeAccelStartPacket;
 import net.jrdemiurge.enigmaticdice.sound.ModSounds;
 import net.jrdemiurge.enigmaticdice.stat.ModStats;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -57,8 +57,8 @@ public class EnigmaticDice {
         container.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
-    public static ResourceLocation location(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    public static Identifier location(String path) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -85,7 +85,7 @@ public class EnigmaticDice {
         );
     }
 
-    @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {

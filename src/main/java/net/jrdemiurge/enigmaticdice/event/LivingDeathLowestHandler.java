@@ -23,7 +23,7 @@ public class LivingDeathLowestHandler {
     public static void onLivingDeath(LivingDeathEvent event) {
         LivingEntity entity = event.getEntity();
 
-        if (entity.getPersistentData().getBoolean("enigmaticdice_should_die") && event.isCanceled()) {
+        if (entity.getPersistentData().getBooleanOr("enigmaticdice_should_die", false) && event.isCanceled()) {
             event.setCanceled(false);
             entity.setHealth(0);
         }

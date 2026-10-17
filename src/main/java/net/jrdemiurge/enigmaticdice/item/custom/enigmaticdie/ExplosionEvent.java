@@ -41,7 +41,7 @@ public class ExplosionEvent extends RandomEvent {
             pLevel.explode(null, tntPos.getX(), tntPos.getY(), tntPos.getZ(), power, causesFire, breakBlocks ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
         }, 75);
 
-        pPlayer.displayClientMessage(Component.translatable("enigmaticdice.event.explosion"), false);
+        pPlayer.sendSystemMessage(Component.translatable("enigmaticdice.event.explosion"));
         return true;
     }
 }

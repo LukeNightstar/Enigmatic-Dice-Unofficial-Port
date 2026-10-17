@@ -5,7 +5,7 @@ import net.jrdemiurge.enigmaticdice.EnigmaticDice;
 import net.jrdemiurge.enigmaticdice.item.ModItems;
 import net.jrdemiurge.enigmaticdice.stat.ModStats;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.damagesource.DamageSource;
@@ -32,7 +32,7 @@ public class MobDropHandler {
         }
 
         if (source.getEntity() instanceof Player player && !(source.getEntity() instanceof FakePlayer)) {
-            if (player.level().random.nextFloat() < Config.EnigmaticDieMobDropChance) {
+            if (player.level().getRandom().nextFloat() < Config.EnigmaticDieMobDropChance) {
                 if (canObtainDice(player, ModStats.OBTAINED_DICE_FROM_MOB)) {
                     ItemStack drop = new ItemStack(ModItems.ENIGAMTIC_DIE.get());
 
@@ -43,13 +43,13 @@ public class MobDropHandler {
                             drop));
 
                     player.awardStat(ModStats.OBTAINED_DICE_FROM_MOB);
-                    player.displayClientMessage(Component.translatable("enigmaticdice.mob_drop." + player.level().random.nextInt(4)), false);
+                    player.sendSystemMessage(Component.translatable("enigmaticdice.mob_drop." + player.level().getRandom().nextInt(4)));
                 }
             }
         }
     }
 
-    public static boolean canObtainDice(Player player, ResourceLocation statKey) {
+    public static boolean canObtainDice(Player player, Identifier statKey) {
         if (player instanceof ServerPlayer serverPlayer) {
             if (Config.MobDiceTimeInterval == 0) return true;
             int playTimeTicks = serverPlayer.getStats().getValue(Stats.CUSTOM.get(Stats.TOTAL_WORLD_TIME));

@@ -6,10 +6,9 @@ import net.jrdemiurge.enigmaticdice.Config;
 import net.jrdemiurge.enigmaticdice.EnigmaticDice;
 import net.jrdemiurge.enigmaticdice.attribute.ModAttributes;
 import net.jrdemiurge.enigmaticdice.item.ModItems;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -29,11 +28,14 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 
 public class GiantsRing extends Item implements ICurioItem {
 
-    private static final ResourceLocation STEP_HEIGHT_ID = EnigmaticDice.location("giants_ring_step_height");
-    private static final ResourceLocation SIZE_SCALE_ID = EnigmaticDice.location("giants_ring_size_scale");
+    private static final Identifier STEP_HEIGHT_ID = EnigmaticDice.location("giants_ring_step_height");
+    private static final Identifier SIZE_SCALE_ID = EnigmaticDice.location("giants_ring_size_scale");
 
     private static final AttributeModifier STEP_HEIGHT_BONUS = new AttributeModifier(
             STEP_HEIGHT_ID, 1, AttributeModifier.Operation.ADD_VALUE);
@@ -52,7 +54,7 @@ public class GiantsRing extends Item implements ICurioItem {
 
     @Override
     public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack) {
-        if (slotContext.entity().level().isClientSide || !(slotContext.entity() instanceof Player))
+        if (slotContext.entity().level().isClientSide() || !(slotContext.entity() instanceof Player))
             return;
         AttributeInstance stepHeight = slotContext.entity().getAttribute(Attributes.STEP_HEIGHT);
         if (stepHeight != null && stepHeight.hasModifier(STEP_HEIGHT_ID)) {
@@ -66,7 +68,7 @@ public class GiantsRing extends Item implements ICurioItem {
 
     @Override
     public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
-        if (slotContext.entity().level().isClientSide || !(slotContext.entity() instanceof Player))
+        if (slotContext.entity().level().isClientSide() || !(slotContext.entity() instanceof Player))
             return;
         AttributeInstance stepHeight = slotContext.entity().getAttribute(Attributes.STEP_HEIGHT);
         if (stepHeight != null && !stepHeight.hasModifier(STEP_HEIGHT_ID)) {
@@ -80,7 +82,7 @@ public class GiantsRing extends Item implements ICurioItem {
 
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
-        if (slotContext.entity().level().isClientSide || !(slotContext.entity() instanceof Player))
+        if (slotContext.entity().level().isClientSide() || !(slotContext.entity() instanceof Player))
             return;
 
         Player player = (Player) slotContext.entity();
@@ -156,7 +158,7 @@ public class GiantsRing extends Item implements ICurioItem {
     }
 
     @Override
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack) {
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         attributes.put(Attributes.MAX_HEALTH, new AttributeModifier(
                 EnigmaticDice.location("giants_ring_health_bonus"),
@@ -178,14 +180,14 @@ public class GiantsRing extends Item implements ICurioItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        if (Screen.hasShiftDown()) {
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.giants_ring_1"));
-            pTooltipComponents.add(Component.literal(" "));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.giants_ring_2"));
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, TooltipDisplay pTooltipDisplay, Consumer<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+        if (Minecraft.getInstance().hasShiftDown()) {
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.giants_ring_1"));
+            pTooltipComponents.accept(Component.literal(" "));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.giants_ring_2"));
         } else {
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.giants_ring_0"));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.holdShift"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.giants_ring_0"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.holdShift"));
         }
     }
 }

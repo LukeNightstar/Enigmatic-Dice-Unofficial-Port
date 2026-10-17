@@ -8,7 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -35,8 +35,8 @@ public class GiveItemEvent extends RandomEvent {
         if (!guaranteed) {
             if (!rollChance(pLevel, pPlayer, rarity)) return false;
         }
-        ResourceLocation resourceLocation = ResourceLocation.parse(itemIdentifier);
-        Item item = BuiltInRegistries.ITEM.get(resourceLocation);
+        Identifier resourceLocation = Identifier.parse(itemIdentifier);
+        Item item = BuiltInRegistries.ITEM.getValue(resourceLocation);
 
         if (item == null) {
             EnigmaticDice.LOGGER.error("Item not found: {}", itemIdentifier);
@@ -64,7 +64,7 @@ public class GiveItemEvent extends RandomEvent {
         pLevel.addFreshEntity(keyEntity);
 
         MutableComponent message = Component.translatable(chatMessage);
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

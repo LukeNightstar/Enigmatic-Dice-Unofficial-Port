@@ -3,7 +3,7 @@ package net.jrdemiurge.enigmaticdice.item.custom.enigmaticdie;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -32,8 +32,8 @@ public class CurseBindingEvent extends RandomEvent {
         if (!(pLevel instanceof ServerLevel serverLevel)) return false;
 
         Optional<Holder.Reference<Enchantment>> bindingCurseOpt = serverLevel.registryAccess()
-                .registryOrThrow(Registries.ENCHANTMENT)
-                .getHolder(ResourceLocation.withDefaultNamespace("binding_curse"));
+                .lookupOrThrow(Registries.ENCHANTMENT)
+                .getHolder(Identifier.withDefaultNamespace("binding_curse"));
 
         if (bindingCurseOpt.isEmpty()) return false;
         Holder<Enchantment> bindingCurse = bindingCurseOpt.get();
@@ -55,7 +55,7 @@ public class CurseBindingEvent extends RandomEvent {
         }
 
         if (enchantedAny) {
-            pPlayer.displayClientMessage(Component.translatable("enigmaticdice.event.binding_curse"), false);
+            pPlayer.sendSystemMessage(Component.translatable("enigmaticdice.event.binding_curse"));
             return true;
         }
 

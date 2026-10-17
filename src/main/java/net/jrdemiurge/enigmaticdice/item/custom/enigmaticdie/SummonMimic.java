@@ -38,7 +38,7 @@ public class SummonMimic extends RandomEvent {
         Entity entity = entityType.create(pLevel);
         if (entity == null) return false;
 
-        entity.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
+        entity.snapTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
         entity.setCustomName(Component.literal("Minic"));
         pLevel.addFreshEntity(entity);
 
@@ -48,7 +48,7 @@ public class SummonMimic extends RandomEvent {
         }
 
         MutableComponent message = Component.translatable("enigmaticdice.event.mimic");
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

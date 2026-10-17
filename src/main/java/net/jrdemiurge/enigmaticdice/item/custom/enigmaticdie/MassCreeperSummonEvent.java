@@ -46,7 +46,7 @@ public class MassCreeperSummonEvent extends RandomEvent {
 
             Entity entity = EntityType.CREEPER.create(pLevel);
             if (!(entity instanceof Creeper creeper)) continue;
-            creeper.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
+            creeper.snapTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
 
             if (random.nextFloat() < 0.5f) {
                 CompoundTag tag = creeper.saveWithoutId(new CompoundTag());
@@ -63,7 +63,7 @@ public class MassCreeperSummonEvent extends RandomEvent {
         }
 
         MutableComponent message = Component.translatable("enigmaticdice.event.creeper_party.level." + eventLevel);
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 

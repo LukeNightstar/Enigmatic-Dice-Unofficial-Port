@@ -46,7 +46,7 @@ public class SummonVallumraptorEvent extends RandomEvent {
                 Entity entity = entityType.create(pLevel);
                 if (entity == null) return;
 
-                entity.moveTo(pos.x, pos.y, pos.z, 0, 0);
+                entity.snapTo(pos.x, pos.y, pos.z, 0, 0);
                 pLevel.addFreshEntity(entity);
 
                 if (entity instanceof TamableAnimal tamable) {
@@ -69,7 +69,7 @@ public class SummonVallumraptorEvent extends RandomEvent {
         }
 
         MutableComponent message = Component.translatable("enigmaticdice.event.vallumraptor");
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

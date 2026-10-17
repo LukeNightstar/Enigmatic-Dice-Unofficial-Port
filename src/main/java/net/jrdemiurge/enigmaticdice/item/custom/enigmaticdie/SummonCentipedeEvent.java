@@ -40,7 +40,7 @@ public class SummonCentipedeEvent extends RandomEvent {
         Entity entity = entityType.create(pLevel);
         if (entity == null) return false;
 
-        entity.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
+        entity.snapTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
         pLevel.addFreshEntity(entity);
 
         if (entity instanceof LivingEntity livingEntity) {
@@ -57,8 +57,8 @@ public class SummonCentipedeEvent extends RandomEvent {
             e.printStackTrace();
         }
 
-        MutableComponent message = Component.translatable("enigmaticdice.event.centipede." + pLevel.random.nextInt(9));
-        pPlayer.displayClientMessage(message, false);
+        MutableComponent message = Component.translatable("enigmaticdice.event.centipede." + pLevel.getRandom().nextInt(9));
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

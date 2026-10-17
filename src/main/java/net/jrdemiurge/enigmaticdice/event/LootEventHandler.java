@@ -3,7 +3,7 @@ package net.jrdemiurge.enigmaticdice.event;
 import net.jrdemiurge.enigmaticdice.Config;
 import net.jrdemiurge.enigmaticdice.EnigmaticDice;
 import net.jrdemiurge.enigmaticdice.item.ModItems;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
@@ -17,8 +17,8 @@ public class LootEventHandler {
 
     @SubscribeEvent
     public static void onLootTableLoad(LootTableLoadEvent event) {
-        ResourceLocation lootTable = event.getName();
-        for (ResourceLocation targetChest : Config.lootTables) {
+        Identifier lootTable = event.getName();
+        for (Identifier targetChest : Config.lootTables) {
             if (lootTable.equals(targetChest)) {
                 addEnigmaticDieToLoot(event);
             }

@@ -49,7 +49,7 @@ public class AccelerateDayCycleEvent extends RandomEvent {
         }, durationTicks);
 
         MutableComponent message = Component.translatable("enigmaticdice.event.accelerate_day_cycle");
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

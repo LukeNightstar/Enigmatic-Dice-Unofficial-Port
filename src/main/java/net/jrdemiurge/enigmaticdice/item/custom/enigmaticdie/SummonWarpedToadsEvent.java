@@ -53,7 +53,7 @@ public class SummonWarpedToadsEvent extends RandomEvent {
                 Entity entity = entityType.create(pLevel);
                 if (entity == null) return;
 
-                entity.moveTo(pos.x, pos.y, pos.z, 0, 0);
+                entity.snapTo(pos.x, pos.y, pos.z, 0, 0);
                 pLevel.addFreshEntity(entity);
 
                 if (entity instanceof TamableAnimal tamable) {
@@ -77,7 +77,7 @@ public class SummonWarpedToadsEvent extends RandomEvent {
         }
 
         MutableComponent message = Component.translatable("enigmaticdice.event.warped_toads");
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

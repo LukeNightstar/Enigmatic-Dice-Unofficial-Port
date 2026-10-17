@@ -3,7 +3,7 @@ package net.jrdemiurge.enigmaticdice.item.custom.enigmaticdie;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -18,7 +18,7 @@ import java.util.Optional;
 
 
 public class EternalBindingEvent extends RandomEvent {
-    private static final ResourceLocation ETERNAL_BINDING_ID = ResourceLocation.fromNamespaceAndPath("enigmaticlegacyplus", "eternal_binding_curse");
+    private static final Identifier ETERNAL_BINDING_ID = Identifier.fromNamespaceAndPath("enigmaticlegacyplus", "eternal_binding_curse");
 
     public EternalBindingEvent(int rarity) {
         this.rarity = rarity;
@@ -33,7 +33,7 @@ public class EternalBindingEvent extends RandomEvent {
         if (!(pLevel instanceof ServerLevel serverLevel)) return false;
 
         Optional<Holder.Reference<Enchantment>> eternalBindingOpt = serverLevel.registryAccess()
-                .registryOrThrow(Registries.ENCHANTMENT)
+                .lookupOrThrow(Registries.ENCHANTMENT)
                 .getHolder(ETERNAL_BINDING_ID);
 
         if (eternalBindingOpt.isEmpty()) return false;
@@ -56,7 +56,7 @@ public class EternalBindingEvent extends RandomEvent {
         }
 
         if (enchantedAny) {
-            pPlayer.displayClientMessage(Component.translatable("enigmaticdice.event.eternal_binding"), false);
+            pPlayer.sendSystemMessage(Component.translatable("enigmaticdice.event.eternal_binding"));
             return true;
         }
 

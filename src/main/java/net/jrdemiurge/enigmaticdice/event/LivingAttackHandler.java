@@ -16,7 +16,7 @@ public class LivingAttackHandler {
     public static void onPlayerHurt(LivingIncomingDamageEvent event) {
         LivingEntity entity = event.getEntity();
 
-        if (entity.level().isClientSide) return;
+        if (entity.level().isClientSide()) return;
 
         if (RingOfAgility.isWearingRingOfAgility(entity) && RingOfAgility.shouldDodge(entity)) {
             event.setCanceled(true);

@@ -53,7 +53,7 @@ public class DayOfInvisibility extends RandomEvent {
         Scheduler.schedule(() -> activePlayers.remove(playerId), duration);
 
         MutableComponent message = Component.translatable("enigmaticdice.event.day_of_invisibility");
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

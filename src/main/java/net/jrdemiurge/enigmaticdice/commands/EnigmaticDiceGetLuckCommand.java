@@ -24,7 +24,7 @@ public class EnigmaticDiceGetLuckCommand {
 
         MutableComponent message = Component.literal("Your luck: " + String.format("%.2f", luckValue))
                 .withStyle(ChatFormatting.GREEN);
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
 
         return 1;
     }

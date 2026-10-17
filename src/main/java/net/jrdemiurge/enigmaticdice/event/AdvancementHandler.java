@@ -36,7 +36,7 @@ public class AdvancementHandler {
                         drop);
 
                 level.addFreshEntity(entity);
-                player.displayClientMessage(Component.translatable("enigmaticdice.advancement_earned." + level.random.nextInt(5)), false);
+                player.sendSystemMessage(Component.translatable("enigmaticdice.advancement_earned." + level.getRandom().nextInt(5)));
             }
         }
     }

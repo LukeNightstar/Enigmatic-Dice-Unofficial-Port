@@ -7,12 +7,10 @@ import net.jrdemiurge.enigmaticdice.item.custom.souleater.SoulEaterData;
 import net.jrdemiurge.enigmaticdice.item.custom.souleater.SoulEaterDataStorage;
 import net.jrdemiurge.enigmaticdice.sound.ModSounds;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -24,24 +22,27 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
+import net.minecraft.world.InteractionResult;
 
-public class SoulEater extends SwordItem {
+public class SoulEater extends Item {
 
-    public SoulEater(Tier pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties) {
-        super(pTier, pProperties.attributes(SwordItem.createAttributes(pTier, pAttackDamageModifier, pAttackSpeedModifier)));
+    public SoulEater(Properties pProperties) {
+        super(pProperties);
     }
 
-    private static final ResourceLocation SOUL_EATER_HEALTH_BUFF_ID = EnigmaticDice.location("soul_eater_bonus_health");
+    private static final Identifier SOUL_EATER_HEALTH_BUFF_ID = EnigmaticDice.location("soul_eater_bonus_health");
     private static final Map<UUID, Long> lastAbilityUseTime = new HashMap<>();
 
     @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (!attacker.level().isClientSide && attacker instanceof Player player) {
+    public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        if (!attacker.level().isClientSide() && attacker instanceof Player player) {
             String dataKey = "soul_eater_spent_health_sum";
-            float usedHp = attacker.getPersistentData().getFloat(dataKey);
+            float usedHp = attacker.getPersistentData().getFloatOr(dataKey, 0.0F);
             float magicDamage = usedHp * (float) Config.SoulEaterChargedAttackDamagePerHP;
             long elapsedTime = attacker.level().getGameTime() - lastAbilityUseTime.getOrDefault(player.getUUID(), -1L);
 
@@ -82,21 +83,21 @@ public class SoulEater extends SwordItem {
                 }
             }
         }
-        return super.hurtEnemy(stack, target, attacker);
+        super.hurtEnemy(stack, target, attacker);
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
+    public InteractionResult use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         ItemStack item = pPlayer.getItemInHand(pUsedHand);
         String dataKey = "soul_eater_spent_health_sum";
         pPlayer.getPersistentData().putFloat(dataKey, 0F);
         pPlayer.startUsingItem(pUsedHand);
-        return InteractionResultHolder.consume(item);
+        return InteractionResult.CONSUME;
     }
 
     @Override
     public void onUseTick(Level pLevel, LivingEntity pLivingEntity, ItemStack pStack, int pRemainingUseDuration) {
-        if (!pLevel.isClientSide && pRemainingUseDuration % 10 == 0) {
+        if (!pLevel.isClientSide() && pRemainingUseDuration % 10 == 0) {
             String dataKey = "soul_eater_spent_health_sum";
 
             float userNewHealth = pLivingEntity.getHealth() - pLivingEntity.getMaxHealth() * 0.2F;
@@ -105,7 +106,7 @@ public class SoulEater extends SwordItem {
             float spentHealth = pLivingEntity.getHealth() - userNewHealth;
             pLivingEntity.setHealth(userNewHealth);
 
-            float spentHealthSum = pLivingEntity.getPersistentData().getFloat(dataKey) + spentHealth;
+            float spentHealthSum = pLivingEntity.getPersistentData().getFloatOr(dataKey, 0.0F) + spentHealth;
             pLivingEntity.getPersistentData().putFloat(dataKey, spentHealthSum);
             lastAbilityUseTime.put(pLivingEntity.getUUID(), pLevel.getGameTime());
 
@@ -120,11 +121,11 @@ public class SoulEater extends SwordItem {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity livingEntity, int timeCharged) {
+    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity livingEntity, int timeCharged) {
         if (livingEntity instanceof Player player) {
-            player.getCooldowns().addCooldown(this, 40);
+            player.getCooldowns().addCooldown(stack, 40);
         }
-        super.releaseUsing(stack, level, livingEntity, timeCharged);
+        return super.releaseUsing(stack, level, livingEntity, timeCharged);
     }
 
     @Override
@@ -133,8 +134,8 @@ public class SoulEater extends SwordItem {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack pStack) {
-        return UseAnim.NONE;
+    public ItemUseAnimation getUseAnimation(ItemStack pStack) {
+        return ItemUseAnimation.NONE;
     }
 
     @Override
@@ -143,37 +144,27 @@ public class SoulEater extends SwordItem {
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return true;
-    }
-
-    @Override
-    public int getEnchantmentValue() {
-        return 15;
-    }
-
-    @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        if (Screen.hasShiftDown()) {
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.soul_eater_1"));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.soul_eater_2"));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.soul_eater_3", Config.SoulEaterChargedAttackDamagePerHP)
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, TooltipDisplay pTooltipDisplay, Consumer<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+        if (Minecraft.getInstance().hasShiftDown()) {
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.soul_eater_1"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.soul_eater_2"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.soul_eater_3", Config.SoulEaterChargedAttackDamagePerHP)
                     .withStyle(ChatFormatting.GOLD));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.soul_eater_4"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.soul_eater_4"));
 
-            pTooltipComponents.add(Component.literal(" "));
+            pTooltipComponents.accept(Component.literal(" "));
 
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.soul_eater_5"));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.soul_eater_6", String.valueOf(Config.SoulEaterHealPercentOnKill   * 100) + "%")
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.soul_eater_5"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.soul_eater_6", String.valueOf(Config.SoulEaterHealPercentOnKill   * 100) + "%")
                     .withStyle(ChatFormatting.GOLD));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.soul_eater_7", String.valueOf(Config.SoulEaterMaxHealthStealPercent   * 100) + "%", Config.SoulEaterMaxHealthBuffDuration/60D, String.valueOf(Config.SoulEaterMaxHealthMultiplierLimit   * 100) + "%")
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.soul_eater_7", String.valueOf(Config.SoulEaterMaxHealthStealPercent   * 100) + "%", Config.SoulEaterMaxHealthBuffDuration/60D, String.valueOf(Config.SoulEaterMaxHealthMultiplierLimit   * 100) + "%")
                     .withStyle(ChatFormatting.GOLD));
 
         } else {
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.soul_eater_0"));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.holdShift"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.soul_eater_0"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.holdShift"));
         }
-        super.appendHoverText(pStack, pContext, pTooltipComponents, pIsAdvanced);
+        super.appendHoverText(pStack, pContext, pTooltipDisplay, pTooltipComponents, pIsAdvanced);
     }
 }

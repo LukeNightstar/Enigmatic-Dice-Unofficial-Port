@@ -18,7 +18,7 @@ public class LivingAttackLowestHandler {
         Entity src = event.getSource().getEntity();
         double dmg = event.getAmount();
 
-        if (entity.level().isClientSide) return;
+        if (entity.level().isClientSide()) return;
 
         if (CrucibleOfRile.isHeldMainHand(entity) && !event.isCanceled()) {
             if (src != null && src != entity && dmg > 1) {

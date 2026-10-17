@@ -44,7 +44,7 @@ public class DayOfStrength extends RandomEvent {
                 AABB area = pPlayer.getBoundingBox().inflate(150);
                 for (LivingEntity entity : serverLevel.getEntitiesOfClass(LivingEntity.class, area)) {
                     if (entity.isAlive()) {
-                        entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 200, 1, false, false));
+                        entity.addEffect(new MobEffectInstance(MobEffects.STRENGTH, 200, 1, false, false));
                     }
                 }
             }
@@ -53,7 +53,7 @@ public class DayOfStrength extends RandomEvent {
         Scheduler.schedule(() -> activePlayers.remove(playerId), duration);
 
         MutableComponent message = Component.translatable("enigmaticdice.event.day_of_strength");
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

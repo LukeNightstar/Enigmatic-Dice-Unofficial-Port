@@ -12,9 +12,9 @@ import java.util.Map;
 
 public class BuffEvent extends RandomEvent {
     private static final Map<Holder<MobEffect>, String> EFFECT_MESSAGES = Map.of(
-            MobEffects.DAMAGE_BOOST, "enigmaticdice.effect.damage_boost",
-            MobEffects.MOVEMENT_SPEED, "enigmaticdice.effect.movement_speed",
-            MobEffects.DIG_SPEED, "enigmaticdice.effect.dig_speed",
+            MobEffects.STRENGTH, "enigmaticdice.effect.damage_boost",
+            MobEffects.SPEED, "enigmaticdice.effect.movement_speed",
+            MobEffects.HASTE, "enigmaticdice.effect.dig_speed",
             MobEffects.HEALTH_BOOST, "enigmaticdice.effect.health_boost",
             MobEffects.NIGHT_VISION, "enigmaticdice.effect.night_vision",
             MobEffects.INVISIBILITY, "enigmaticdice.effect.invisibility",

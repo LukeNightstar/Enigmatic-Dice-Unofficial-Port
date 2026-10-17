@@ -5,7 +5,7 @@ import net.jrdemiurge.enigmaticdice.attribute.ModAttributes;
 import net.jrdemiurge.enigmaticdice.scheduler.Scheduler;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 
 
 public class MiniSizeShrinkEvent extends RandomEvent {
-    private static final ResourceLocation MINI_SIZE_SCALE_ID = EnigmaticDice.location("mini_size_scale");
+    private static final Identifier MINI_SIZE_SCALE_ID = EnigmaticDice.location("mini_size_scale");
     private static final AttributeModifier MINI_SIZE_SCALE_MULTIPLIER = new AttributeModifier(
             MINI_SIZE_SCALE_ID, -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
     );
@@ -43,7 +43,7 @@ public class MiniSizeShrinkEvent extends RandomEvent {
         }, debuffDuration);
 
         MutableComponent message = Component.translatable("enigmaticdice.event.mini_size_shrink");
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

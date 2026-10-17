@@ -5,7 +5,7 @@ import net.jrdemiurge.enigmaticdice.EnigmaticDice;
 import net.jrdemiurge.enigmaticdice.item.ModItems;
 import net.jrdemiurge.enigmaticdice.stat.ModStats;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -25,8 +25,8 @@ public class BlockBreakHandler {
         Player player = event.getPlayer();
         Level level = (Level) event.getLevel();
 
-        if (!level.isClientSide && player != null && !(player instanceof FakePlayer)) {
-            if (level.random.nextFloat() < Config.EnigmaticDieBlockDropChance) {
+        if (!level.isClientSide() && player != null && !(player instanceof FakePlayer)) {
+            if (level.getRandom().nextFloat() < Config.EnigmaticDieBlockDropChance) {
                 if (canObtainDice(player, ModStats.OBTAINED_DICE_FROM_BLOCK)) {
                     ItemStack drop = new ItemStack(ModItems.ENIGAMTIC_DIE.get());
 
@@ -39,13 +39,13 @@ public class BlockBreakHandler {
                     level.addFreshEntity(entity);
 
                     player.awardStat(ModStats.OBTAINED_DICE_FROM_BLOCK);
-                    player.displayClientMessage(Component.translatable("enigmaticdice.block_break"), false);
+                    player.sendSystemMessage(Component.translatable("enigmaticdice.block_break"));
                 }
             }
         }
     }
 
-    public static boolean canObtainDice(Player player, ResourceLocation statKey) {
+    public static boolean canObtainDice(Player player, Identifier statKey) {
         if (player instanceof ServerPlayer serverPlayer) {
             if (Config.BlockDiceTimeInterval == 0) return true;
             int playTimeTicks = serverPlayer.getStats().getValue(Stats.CUSTOM.get(Stats.TOTAL_WORLD_TIME));

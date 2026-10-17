@@ -7,10 +7,9 @@ import net.jrdemiurge.enigmaticdice.item.ModItems;
 import net.jrdemiurge.enigmaticdice.scheduler.Scheduler;
 import net.jrdemiurge.enigmaticdice.sound.ModSounds;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -21,7 +20,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -33,26 +31,32 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
+import org.jspecify.annotations.Nullable;
 
-public class Permafrost extends SwordItem {
+public class Permafrost extends Item {
     public static final String PERSISTENT_DATA_PERMAFROST_STACKS_FLY_SPEED_REDUCTION = "PermafrostStacksFlySpeedReduction";
     public static final String PERSISTENT_DATA_PERMAFROST_AURA_FLY_SPEED_REDUCTION = "PermafrostAuraFlySpeedReduction";
-    private static final ResourceLocation STACKED_SPEED_DEBUFF_ID = EnigmaticDice.location("permafrost_stacked_speed_debuff");
-    private static final ResourceLocation STACKED_FLYING_SPEED_DEBUFF_ID = EnigmaticDice.location("permafrost_stacked_flying_speed_debuff");
-    private static final ResourceLocation AURA_SPEED_DEBUFF_ID = EnigmaticDice.location("permafrost_aura_speed_debuff");
-    private static final ResourceLocation AURA_FLYING_SPEED_DEBUFF_ID = EnigmaticDice.location("permafrost_aura_flying_speed_debuff");
+    private static final Identifier STACKED_SPEED_DEBUFF_ID = EnigmaticDice.location("permafrost_stacked_speed_debuff");
+    private static final Identifier STACKED_FLYING_SPEED_DEBUFF_ID = EnigmaticDice.location("permafrost_stacked_flying_speed_debuff");
+    private static final Identifier AURA_SPEED_DEBUFF_ID = EnigmaticDice.location("permafrost_aura_speed_debuff");
+    private static final Identifier AURA_FLYING_SPEED_DEBUFF_ID = EnigmaticDice.location("permafrost_aura_flying_speed_debuff");
     public static final Map<UUID, Integer> stackMap = new HashMap<>();
     private static final Map<UUID, Long> lastHitTimeMap = new HashMap<>();
     public static final Set<UUID> auraApplied = new HashSet<>();
     private static final Map<UUID, Long> lastAuraTimeMap = new HashMap<>();
 
-    public Permafrost(Tier pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties) {
-        super(pTier, pProperties.attributes(SwordItem.createAttributes(pTier, pAttackDamageModifier, pAttackSpeedModifier)));
+    public Permafrost(Properties pProperties) {
+        super(pProperties);
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (!attacker.level().isClientSide && attacker instanceof Player player) {
+    public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        if (!attacker.level().isClientSide() && attacker instanceof Player player) {
             if (player.getAttackStrengthScale(0.5F) > 0.9F) {
 
                 int debuffDuration = Config.PermafrostAttackDebuffDuration;
@@ -140,12 +144,12 @@ public class Permafrost extends SwordItem {
                 }, debuffDuration);
             }
         }
-        return super.hurtEnemy(stack, target, attacker);
+        super.hurtEnemy(stack, target, attacker);
     }
 
     @Override
-    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        if (!pLevel.isClientSide && pEntity instanceof Player player) {
+    public void inventoryTick(ItemStack pStack, ServerLevel pLevel, Entity pEntity, @Nullable EquipmentSlot pSlot) {
+        if (!pLevel.isClientSide() && pEntity instanceof Player player) {
             if (pLevel.getGameTime() % 5L != 0L)  return;
 
             boolean isInMainHand = player.getMainHandItem().is(ModItems.PERMAFROST.get());
@@ -158,7 +162,6 @@ public class Permafrost extends SwordItem {
                 AABB area = pEntity.getBoundingBox().inflate(auraRadius);
                 List<LivingEntity> victims = pLevel.getEntitiesOfClass(LivingEntity.class, area,
                         e -> e != player && e.isAlive() && e.isPickable());
-
 
                 for (LivingEntity victim : victims) {
                     if (checkFriendlyFire(victim, player)) {
@@ -257,7 +260,7 @@ public class Permafrost extends SwordItem {
                 }
             }
         }
-        super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
+        super.inventoryTick(pStack, pLevel, pEntity, pSlot);
     }
 
     public static boolean checkFriendlyFire(LivingEntity target, LivingEntity attacker) {
@@ -286,40 +289,30 @@ public class Permafrost extends SwordItem {
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return true;
-    }
-
-    @Override
-    public int getEnchantmentValue() {
-        return 15;
-    }
-
-    @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        if (Screen.hasShiftDown()) {
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, TooltipDisplay pTooltipDisplay, Consumer<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+        if (Minecraft.getInstance().hasShiftDown()) {
             int stackDebuffDuration = Config.PermafrostAttackDebuffDuration / 20;
             int maxStacks = Config.PermafrostAttackMaxStacks;
             double reductionFactorPerStack = Config.PermafrostAttackReductionPerStack * 100;
             int auraRadius = Config.PermafrostAuraRadius;
             double auraReductionFactor = Config.PermafrostAuraReductionFactor * 100;
 
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.permafrost_1"));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.permafrost_2", reductionFactorPerStack, stackDebuffDuration)
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.permafrost_1"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.permafrost_2", reductionFactorPerStack, stackDebuffDuration)
                     .withStyle(ChatFormatting.GOLD));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.permafrost_3", maxStacks)
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.permafrost_3", maxStacks)
                     .withStyle(ChatFormatting.GOLD));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.permafrost_4"));
-            pTooltipComponents.add(Component.literal(" "));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.permafrost_5",auraRadius)
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.permafrost_4"));
+            pTooltipComponents.accept(Component.literal(" "));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.permafrost_5",auraRadius)
                     .withStyle(ChatFormatting.GOLD));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.permafrost_6",auraReductionFactor)
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.permafrost_6",auraReductionFactor)
                     .withStyle(ChatFormatting.GOLD));
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.permafrost_7"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.permafrost_7"));
         } else {
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.holdShift"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.holdShift"));
         }
-        super.appendHoverText(pStack, pContext, pTooltipComponents, pIsAdvanced);
+        super.appendHoverText(pStack, pContext, pTooltipDisplay, pTooltipComponents, pIsAdvanced);
     }
 }

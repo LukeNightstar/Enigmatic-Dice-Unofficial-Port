@@ -3,7 +3,7 @@ package net.jrdemiurge.enigmaticdice.effect;
 import net.jrdemiurge.enigmaticdice.EnigmaticDice;
 import net.jrdemiurge.enigmaticdice.effect.custom.*;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -40,7 +40,7 @@ public class ModEffects {
             () -> new DayOnTheMoon(0xccccff)
                     .addAttributeModifier(
                             Attributes.GRAVITY,
-                            ResourceLocation.fromNamespaceAndPath(EnigmaticDice.MOD_ID, "day_on_the_moon_gravity"),
+                            Identifier.fromNamespaceAndPath(EnigmaticDice.MOD_ID, "day_on_the_moon_gravity"),
                             -0.06,
                             AttributeModifier.Operation.ADD_VALUE
                     )

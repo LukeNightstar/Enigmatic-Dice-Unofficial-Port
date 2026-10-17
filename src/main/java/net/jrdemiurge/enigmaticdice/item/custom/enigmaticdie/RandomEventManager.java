@@ -13,7 +13,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
@@ -102,7 +102,7 @@ public class RandomEventManager {
 
     // Configs written by older versions can still name items that no longer exist.
     private static boolean isKnownItem(String id) {
-        ResourceLocation location = id == null ? null : ResourceLocation.tryParse(id);
+        Identifier location = id == null ? null : Identifier.tryParse(id);
         return location != null && BuiltInRegistries.ITEM.containsKey(location);
     }
 
@@ -356,8 +356,8 @@ public class RandomEventManager {
             selected = resourceEvents.get(resourceEvents.size() - 1);
         }
 
-        ResourceLocation resourceLocation = ResourceLocation.parse(selected.item);
-        Item item = BuiltInRegistries.ITEM.get(resourceLocation);
+        Identifier resourceLocation = Identifier.parse(selected.item);
+        Item item = BuiltInRegistries.ITEM.getValue(resourceLocation);
 
         ItemStack itemStack = new ItemStack(item, Math.max(selected.amount, 1));
 
@@ -380,7 +380,7 @@ public class RandomEventManager {
         pLevel.addFreshEntity(itemEntity);
 
         if (selected.chatMessage != null && !selected.chatMessage.isEmpty()) {
-            pPlayer.displayClientMessage(Component.translatable(selected.chatMessage), false);
+            pPlayer.sendSystemMessage(Component.translatable(selected.chatMessage));
         }
     }
 

@@ -35,7 +35,7 @@ public class AncientDebrisCageEvent extends RandomEvent {
         }
 
         MutableComponent message = Component.translatable("enigmaticdice.event.safe_message");
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

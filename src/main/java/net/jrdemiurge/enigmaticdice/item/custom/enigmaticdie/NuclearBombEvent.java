@@ -7,7 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -34,13 +34,13 @@ public class NuclearBombEvent extends RandomEvent {
 
         Vec3 spawnPos = pPlayer.position().add(lookVec.scale(2.5)).add(0, 2, 0);
 
-        EntityType<?> entityType = BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse("alexscaves:nuclear_bomb"));
+        EntityType<?> entityType = BuiltInRegistries.ENTITY_TYPE.getValue(Identifier.parse("alexscaves:nuclear_bomb"));
         if (entityType == null || entityType == EntityType.PIG) return false;
 
         Scheduler.schedule(() -> {
             Entity entity = entityType.create(pLevel);
             if (entity != null) {
-                entity.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
+                entity.snapTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
                 pLevel.addFreshEntity(entity);
                 pLevel.playSound(null, BlockPos.containing(spawnPos), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.2F, 1.0F);
             }

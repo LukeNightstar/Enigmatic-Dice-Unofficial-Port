@@ -8,7 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -35,21 +35,21 @@ public class GiveAncientTomeEvent extends RandomEvent {
 
         if (!(pLevel instanceof ServerLevel serverLevel)) return false;
 
-        ResourceLocation resourceLocation = ResourceLocation.parse("quark:ancient_tome");
-        Item item = BuiltInRegistries.ITEM.get(resourceLocation);
-        if (item == null || item == BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace("air"))) {
+        Identifier resourceLocation = Identifier.parse("quark:ancient_tome");
+        Item item = BuiltInRegistries.ITEM.getValue(resourceLocation);
+        if (item == null || item == BuiltInRegistries.ITEM.getValue(Identifier.withDefaultNamespace("air"))) {
             EnigmaticDice.LOGGER.error("Item not found: {}", "quark:ancient_tome");
             return false;
         }
 
-        Registry<Enchantment> enchantmentRegistry = serverLevel.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        Registry<Enchantment> enchantmentRegistry = serverLevel.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
         List<Holder.Reference<Enchantment>> allEnchantments = new ArrayList<>(enchantmentRegistry.holders().toList());
         if (allEnchantments.isEmpty()) {
             EnigmaticDice.LOGGER.warn("No enchantments found in registry.");
             return false;
         }
 
-        Holder<Enchantment> chosenEnchantment = allEnchantments.get(pLevel.random.nextInt(allEnchantments.size()));
+        Holder<Enchantment> chosenEnchantment = allEnchantments.get(pLevel.getRandom().nextInt(allEnchantments.size()));
 
         ItemStack itemStack = new ItemStack(item);
         itemStack.enchant(chosenEnchantment, 1);
@@ -64,7 +64,7 @@ public class GiveAncientTomeEvent extends RandomEvent {
         pLevel.addFreshEntity(keyEntity);
 
         MutableComponent message = Component.translatable("enigmaticdice.gift.blue");
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

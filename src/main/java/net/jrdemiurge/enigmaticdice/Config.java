@@ -1,6 +1,6 @@
 package net.jrdemiurge.enigmaticdice;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -10,7 +10,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@EventBusSubscriber(modid = EnigmaticDice.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = EnigmaticDice.MOD_ID)
 public class Config
 {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
@@ -424,11 +424,11 @@ public class Config
     public static double CrucibleOfRilePermanentArmorPerUnique;
     public static double MoaiCharmKnockbackResistanceBonus;
 
-    public static List<ResourceLocation> lootTables;
+    public static List<Identifier> lootTables;
 
     private static boolean validateLootTable(final Object obj)
     {
-        return obj instanceof final String lootTable && ResourceLocation.tryParse(lootTable) != null;
+        return obj instanceof final String lootTable && Identifier.tryParse(lootTable) != null;
     }
 
     @SubscribeEvent
@@ -495,7 +495,7 @@ public class Config
         MoaiCharmKnockbackResistanceBonus = MOAI_CHARM_KNOCKBACK_RESISTANCE.get();
 
         lootTables = LOOT_TABLES.get().stream()
-                .map(s -> ResourceLocation.parse(s))
+                .map(s -> Identifier.parse(s))
                 .collect(Collectors.toList());
     }
 }

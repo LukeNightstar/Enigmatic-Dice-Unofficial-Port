@@ -2,9 +2,8 @@ package net.jrdemiurge.enigmaticdice.item.custom;
 
 import net.jrdemiurge.enigmaticdice.EnigmaticDice;
 import net.jrdemiurge.enigmaticdice.scheduler.Scheduler;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -13,26 +12,30 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
+import org.jspecify.annotations.Nullable;
 
 public class FourLeafClover extends Item {
 
-    private static final ResourceLocation LUCK_MODIFIER_ID = EnigmaticDice.location("four_leaf_clover_luck");
+    private static final Identifier LUCK_MODIFIER_ID = EnigmaticDice.location("four_leaf_clover_luck");
 
     public FourLeafClover(Properties pProperties) {
         super(pProperties);
     }
 
     @Override
-    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        if (!pLevel.isClientSide && pEntity instanceof Player player) {
+    public void inventoryTick(ItemStack pStack, ServerLevel pLevel, Entity pEntity, @Nullable EquipmentSlot pSlot) {
+        if (!pLevel.isClientSide() && pEntity instanceof Player player) {
 
             boolean isFirstClover = false;
-            for (ItemStack itemStack : player.getInventory().items) {
+            for (ItemStack itemStack : player.getInventory().getNonEquipmentItems()) {
                 if (itemStack.getItem() instanceof FourLeafClover) {
                     if (itemStack == pStack) {
                         isFirstClover = true;
@@ -44,7 +47,7 @@ public class FourLeafClover extends Item {
             if (!isFirstClover) return;
 
             int cloverCount = 0;
-            for (ItemStack itemStack : player.getInventory().items) {
+            for (ItemStack itemStack : player.getInventory().getNonEquipmentItems()) {
                 if (itemStack.getItem() instanceof FourLeafClover) {
                     cloverCount += itemStack.getCount();
                 }
@@ -72,7 +75,7 @@ public class FourLeafClover extends Item {
 
             Scheduler.schedule(() -> {
                 boolean hasClover = false;
-                for (ItemStack item : player.getInventory().items) {
+                for (ItemStack item : player.getInventory().getNonEquipmentItems()) {
                     if (item.getItem() instanceof FourLeafClover) {
                         hasClover = true;
                         break;
@@ -92,12 +95,12 @@ public class FourLeafClover extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        if (Screen.hasShiftDown()) {
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.four_leaf_clever"));
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, TooltipDisplay pTooltipDisplay, Consumer<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+        if (Minecraft.getInstance().hasShiftDown()) {
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.four_leaf_clever"));
         } else {
-            pTooltipComponents.add(Component.translatable("tooltip.enigmaticdice.holdShift"));
+            pTooltipComponents.accept(Component.translatable("tooltip.enigmaticdice.holdShift"));
         }
-        super.appendHoverText(pStack, pContext, pTooltipComponents, pIsAdvanced);
+        super.appendHoverText(pStack, pContext, pTooltipDisplay, pTooltipComponents, pIsAdvanced);
     }
 }

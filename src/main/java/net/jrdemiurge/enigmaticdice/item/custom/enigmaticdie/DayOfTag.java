@@ -44,7 +44,7 @@ public class DayOfTag extends RandomEvent {
                 AABB area = pPlayer.getBoundingBox().inflate(150);
                 for (LivingEntity entity : serverLevel.getEntitiesOfClass(LivingEntity.class, area)) {
                     if (entity.isAlive()) {
-                        entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 200, 2, false, false));
+                        entity.addEffect(new MobEffectInstance(MobEffects.SPEED, 200, 2, false, false));
                     }
                 }
             }
@@ -53,7 +53,7 @@ public class DayOfTag extends RandomEvent {
         Scheduler.schedule(() -> activePlayers.remove(playerId), duration);
 
         MutableComponent message = Component.translatable("enigmaticdice.event.day_of_tag");
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

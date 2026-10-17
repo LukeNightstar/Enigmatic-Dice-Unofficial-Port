@@ -42,7 +42,7 @@ public class SummonDummyChest extends RandomEvent {
         Entity entity = entityType.create(pLevel);
         if (entity == null) return false;
 
-        entity.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
+        entity.snapTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
         entity.setCustomName(Component.literal("Dummy Chest"));
         pLevel.addFreshEntity(entity);
 
@@ -64,7 +64,7 @@ public class SummonDummyChest extends RandomEvent {
         }, 20);
 
         MutableComponent message = Component.translatable("enigmaticdice.event.dummy_chest");
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

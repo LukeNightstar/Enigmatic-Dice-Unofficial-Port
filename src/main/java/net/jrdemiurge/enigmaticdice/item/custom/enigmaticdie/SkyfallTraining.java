@@ -42,7 +42,7 @@ public class SkyfallTraining extends RandomEvent {
         pPlayer.teleportTo(pPlayer.getX(), newY, pPlayer.getZ());
 
         MutableComponent message = Component.translatable("enigmaticdice.event.skyfall_training");
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

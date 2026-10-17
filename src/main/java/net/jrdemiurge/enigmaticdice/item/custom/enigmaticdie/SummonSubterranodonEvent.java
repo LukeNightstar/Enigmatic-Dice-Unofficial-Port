@@ -41,7 +41,7 @@ public class SummonSubterranodonEvent extends RandomEvent {
         Entity entity = entityType.create(pLevel);
         if (entity == null) return false;
 
-        entity.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
+        entity.snapTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
         pLevel.addFreshEntity(entity);
 
         if (entity instanceof TamableAnimal tamable) {
@@ -61,7 +61,7 @@ public class SummonSubterranodonEvent extends RandomEvent {
         }
 
         MutableComponent message = Component.translatable("enigmaticdice.event.subterranodon");
-        pPlayer.displayClientMessage(message, false);
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 }

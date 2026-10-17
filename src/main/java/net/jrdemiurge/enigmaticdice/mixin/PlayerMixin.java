@@ -66,8 +66,8 @@ public abstract class PlayerMixin extends LivingEntity {
         Player player = (Player) (Object) this;
         UUID playerId = player.getUUID();
 
-        float permafrostStacksFlySpeedReduction = player.getPersistentData().getFloat(Permafrost.PERSISTENT_DATA_PERMAFROST_STACKS_FLY_SPEED_REDUCTION);
-        float permafrostAuraFlySpeedReduction = player.getPersistentData().getFloat(Permafrost.PERSISTENT_DATA_PERMAFROST_AURA_FLY_SPEED_REDUCTION);
+        float permafrostStacksFlySpeedReduction = player.getPersistentData().getFloatOr(Permafrost.PERSISTENT_DATA_PERMAFROST_STACKS_FLY_SPEED_REDUCTION, 0.0F);
+        float permafrostAuraFlySpeedReduction = player.getPersistentData().getFloatOr(Permafrost.PERSISTENT_DATA_PERMAFROST_AURA_FLY_SPEED_REDUCTION, 0.0F);
         float permafrostFlySpeedRecovery = 0;
 
         if (permafrostStacksFlySpeedReduction != 0 && !Permafrost.stackMap.containsKey(playerId)) {

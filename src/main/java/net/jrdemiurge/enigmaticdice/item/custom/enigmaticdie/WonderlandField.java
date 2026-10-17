@@ -44,7 +44,7 @@ public class WonderlandField extends RandomEvent {
             Entity entity = entityType.create(pLevel);
             if (entity == null) continue;
 
-            entity.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
+            entity.snapTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
 
             pLevel.addFreshEntity(entity);
 
@@ -65,7 +65,7 @@ public class WonderlandField extends RandomEvent {
         Entity entity = entityType.create(pLevel);
         if (entity == null) return false;
 
-        entity.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
+        entity.snapTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
 
         if (entity instanceof Mob mob) {
             mob.setNoAi(true);
@@ -74,8 +74,8 @@ public class WonderlandField extends RandomEvent {
 
         pLevel.addFreshEntity(entity);
 
-        MutableComponent message = Component.translatable("enigmaticdice.event.wonderland_field." + pLevel.random.nextInt(3));
-        pPlayer.displayClientMessage(message, false);
+        MutableComponent message = Component.translatable("enigmaticdice.event.wonderland_field." + pLevel.getRandom().nextInt(3));
+        pPlayer.sendSystemMessage(message);
         return true;
     }
 
