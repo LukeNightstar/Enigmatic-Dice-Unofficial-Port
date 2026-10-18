@@ -65,7 +65,8 @@ Every individual change is recorded in the git history of each branch.
 
 `./gradlew build` produces `build/libs/enigmaticdice-<version>.jar`. The dev runs (`runClient`, `runServer`) on the
 `26.1.2` branch expect a Legacy Plus 26.1.2 jar at `libs/enigmaticlegacyplus-26.1.2-1.1.2.jar` (not committed);
-`./gradlew runClient -PquickPlayServer=localhost:25565` joins a running dev server directly.
+`./gradlew runClient -PquickPlayServer=localhost:25565` joins a running dev server directly. Add `-PwithBetterCombat` to
+`runClient`/`runServer` to load Better Combat (and its dependencies) and test the Dice weapon attributes.
 
 ## License
 

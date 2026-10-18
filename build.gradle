@@ -85,6 +85,13 @@ dependencies {
     // copied into libs/) and its Patchouli dependency. Dice only refers to Legacy Plus by registry ids.
     localRuntime files('libs/enigmaticlegacyplus-26.1.2-1.1.2.jar')
     localRuntime "maven.modrinth:patchouli:${patchouli_version}"
+
+    // Dev runs only, with -PwithBetterCombat: Better Combat (reads data/enigmaticdice/weapon_attributes) and its dependencies.
+    if (project.hasProperty("withBetterCombat")) {
+        localRuntime "maven.modrinth:better-combat:YPa9bdAg"
+        localRuntime "maven.modrinth:player-animation-library:QmAdOGjK"
+        localRuntime "maven.modrinth:cloth-config:TimoYzse"
+    }
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
